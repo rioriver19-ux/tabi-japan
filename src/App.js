@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-const API_KEY = "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";
+const API_KEY = process.env.REACT_APP_ANTHROPIC_KEY;
 
 const SYSTEM_PROMPT = `You are TABI（旅）, a warm and knowledgeable AI concierge for travelers visiting Japan. 
 
