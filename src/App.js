@@ -72,21 +72,18 @@ export default function App() {
         apiMessages.unshift({ role: "user", content: userText });
       }
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": API_KEY,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true",
-        },
-        body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 1000,
-          system: SYSTEM_PROMPT,
-          messages: apiMessages,
-        }),
-      });
+      const response = await fetch("/api/chat", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 1000,
+    system: SYSTEM_PROMPT,
+    messages: apiMessages,
+  }),
+});
 
       const data = await response.json();
       const reply = data.content?.map((b) => b.text || "").join("") || "Sorry, I couldn't get a response.";
