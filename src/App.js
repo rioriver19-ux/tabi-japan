@@ -118,7 +118,7 @@ export default function App() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #0f0c1a 0%, #1a0a2e 40%, #0d1f3c 100%)",
+      background: "linear-gradient(135deg, #0f0c1a 0%, #1a0a2e 40%, #0d5f3c 100%)",
       fontFamily: "'Georgia', 'Times New Roman', serif",
       display: "flex",
       flexDirection: "column",
