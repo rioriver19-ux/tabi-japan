@@ -206,6 +206,14 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [placesResults, setPlacesResults] = useState({});
   const [showPlanner, setShowPlanner] = useState(false);
+  const [showInstallBanner, setShowInstallBanner] = useState(() => {
+    try { return !localStorage.getItem("tabi_install_dismissed"); } catch { return true; }
+  });
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isInStandaloneMode = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
   const [plannerForm, setPlannerForm] = useState({ days: "3", area: "Tokyo", style: "local", budget: "moderate", group: "couple" });
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
@@ -221,6 +229,29 @@ export default function App() {
       localStorage.setItem("tabi_messages_" + lang, JSON.stringify(msgsToSave));
     } catch (e) { console.error("Failed to save:", e); }
   }, [messages, lang]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const dismissInstallBanner = () => {
+    setShowInstallBanner(false);
+    try { localStorage.setItem("tabi_install_dismissed", "1"); } catch {}
+  };
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") dismissInstallBanner();
+      setDeferredPrompt(null);
+    }
+  };
 
   const switchLang = (newLang) => {
     setLang(newLang);
@@ -532,6 +563,66 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
           <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : "0 4px 16px rgba(232,54,61,0.4)", color: "#fff" }}>↑</button>
         </div>
       </div>
+
+      {/* Install Banner */}
+      {showInstallBanner && !isInStandaloneMode && (isIOS || isAndroid) && (
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "linear-gradient(135deg, #1a0a2e, #0d1f3c)", borderTop: "1px solid rgba(255,255,255,0.15)", padding: "16px 20px", zIndex: 200, display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <svg viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+                  <defs><linearGradient id="sunI" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#f5c842"/><stop offset="100%" stopColor="#e8a020"/></linearGradient></defs>
+                  <circle cx="33" cy="16" r="7" fill="url(#sunI)" opacity="0.9"/>
+                  <polygon points="22,8 6,34 38,34" fill="white" opacity="0.95"/>
+                  <polygon points="22,8 14,22 30,22" fill="#e8363d"/>
+                  <polygon points="22,8 16,18 28,18" fill="white"/>
+                  <rect x="4" y="33" width="36" height="1.5" fill="white" opacity="0.4" rx="1"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}>ホーム画面に追加</div>
+                <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 2 }}>アプリとして使えます！</div>
+              </div>
+            </div>
+            <button onClick={dismissInstallBanner} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: 20, cursor: "pointer", padding: 4 }}>×</button>
+          </div>
+
+          {isIOS && (
+            <div style={{ background: "rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 14px" }}>
+              <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, lineHeight: 1.8 }}>
+                <span style={{ color: "#fff", fontWeight: "bold" }}>iPhoneの場合：</span><br/>
+                1. 下の <strong>共有ボタン（□↑）</strong> をタップ<br/>
+                2. <strong>「ホーム画面に追加」</strong> を選択<br/>
+                3. 「追加」をタップ ✓
+              </div>
+              <button onClick={dismissInstallBanner} style={{ marginTop: 10, width: "100%", padding: "10px", borderRadius: 10, background: "rgba(232,54,61,0.3)", border: "1px solid rgba(232,54,61,0.5)", color: "#fff", fontSize: 13, cursor: "pointer" }}>
+                わかりました！
+              </button>
+            </div>
+          )}
+
+          {isAndroid && (
+            <div style={{ display: "flex", gap: 8 }}>
+              {deferredPrompt ? (
+                <button onClick={handleInstall} style={{ flex: 1, padding: "12px", borderRadius: 12, background: "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", color: "#fff", fontSize: 14, fontWeight: "bold", cursor: "pointer", boxShadow: "0 4px 16px rgba(232,54,61,0.4)" }}>
+                  📱 インストール
+                </button>
+              ) : (
+                <div style={{ flex: 1, background: "rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 14px" }}>
+                  <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, lineHeight: 1.8 }}>
+                    <span style={{ color: "#fff", fontWeight: "bold" }}>Androidの場合：</span><br/>
+                    1. ブラウザの <strong>メニュー（⋮）</strong> をタップ<br/>
+                    2. <strong>「ホーム画面に追加」</strong> を選択
+                  </div>
+                </div>
+              )}
+              <button onClick={dismissInstallBanner} style={{ padding: "12px 16px", borderRadius: 12, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.6)", fontSize: 13, cursor: "pointer" }}>
+                あとで
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Planner Modal */}
       {showPlanner && (
