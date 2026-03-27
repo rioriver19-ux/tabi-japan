@@ -196,6 +196,8 @@ export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [placesResults, setPlacesResults] = useState({});
+  const [showPlanner, setShowPlanner] = useState(false);
+  const [plannerForm, setPlannerForm] = useState({ days: "3", area: "Tokyo", style: "local", budget: "moderate", group: "couple" });
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   const cameraInputRef = useRef(null);
@@ -320,6 +322,29 @@ export default function App() {
     finally { setLoading(false); inputRef.current?.focus(); }
   };
 
+  const generateItinerary = async () => {
+    setShowPlanner(false);
+    const { days, area, style, budget, group } = plannerForm;
+    const styleMap = { local: "local hidden gems, avoiding tourist traps", balanced: "mix of popular spots and local places", tourist: "popular tourist attractions" };
+    const budgetMap = { budget: "budget (under ¥5000/day)", moderate: "moderate (¥5000-15000/day)", luxury: "luxury (¥15000+/day)" };
+    const groupMap = { solo: "solo traveler", couple: "couple", family: "family with kids (stroller-friendly options needed)", friends: "group of friends" };
+    const prompt = `Please create a detailed ${days}-day itinerary for ${area}, Japan.
+Travel style: ${styleMap[style]}
+Budget: ${budgetMap[budget]}
+Group: ${groupMap[group]}
+
+Format as:
+**Day 1 - [Theme]**
+🌅 Morning: ...
+🌞 Afternoon: ...
+🌙 Evening: ...
+💴 Estimated cost: ¥XXXX
+
+Include specific neighborhood names, timing tips, and local insider advice. Add [SEARCH: best restaurants in ${area}] at the end.`;
+
+    sendMessage(prompt);
+  };
+
   const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
   const getPriceLevel = (l) => ({ PRICE_LEVEL_INEXPENSIVE: "¥", PRICE_LEVEL_MODERATE: "¥¥", PRICE_LEVEL_EXPENSIVE: "¥¥¥", PRICE_LEVEL_VERY_EXPENSIVE: "¥¥¥¥" }[l] || "");
 
@@ -424,12 +449,51 @@ export default function App() {
         <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderTop: "1px solid rgba(255,255,255,0.06)", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end" }}>
           <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
           <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📷</button>
+          <button onClick={() => setShowPlanner(true)} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }} title="Plan itinerary">🗓️</button>
           <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder={placeholder[lang]} rows={1}
             style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", color: "#fff", fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
             onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
           <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : "0 4px 16px rgba(232,54,61,0.4)", color: "#fff" }}>↑</button>
         </div>
       </div>
+
+      {/* Planner Modal */}
+      {showPlanner && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 20 }}>
+          <div style={{ background: "linear-gradient(135deg, #1a0a2e, #0d1f3c)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 24, padding: 28, width: "100%", maxWidth: 420 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>🗓️ Plan My Trip</div>
+              <button onClick={() => setShowPlanner(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.5)", fontSize: 22, cursor: "pointer" }}>×</button>
+            </div>
+
+            {[
+              { label: "📅 How many days?", key: "days", options: [["2", "2 days"], ["3", "3 days"], ["4", "4 days"], ["5", "5 days"], ["7", "1 week"]] },
+              { label: "📍 Main area?", key: "area", options: [["Tokyo", "Tokyo"], ["Kyoto", "Kyoto"], ["Osaka", "Osaka"], ["Tokyo & Kyoto", "Tokyo + Kyoto"], ["Tokyo & Osaka", "Tokyo + Osaka"]] },
+              { label: "🎯 Travel style?", key: "style", options: [["local", "🏘️ Local & hidden"], ["balanced", "⚖️ Balanced"], ["tourist", "⛩️ Classic spots"]] },
+              { label: "💴 Budget?", key: "budget", options: [["budget", "💰 Budget"], ["moderate", "💳 Moderate"], ["luxury", "✨ Luxury"]] },
+              { label: "👥 Who's going?", key: "group", options: [["solo", "🧍 Solo"], ["couple", "👫 Couple"], ["family", "👨‍👩‍👧 Family"], ["friends", "👯 Friends"]] },
+            ].map(({ label, key, options }) => (
+              <div key={key} style={{ marginBottom: 16 }}>
+                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, marginBottom: 8 }}>{label}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {options.map(([value, display]) => (
+                    <button key={value} onClick={() => setPlannerForm(prev => ({ ...prev, [key]: value }))}
+                      style={{ padding: "7px 14px", borderRadius: 20, fontSize: 13, cursor: "pointer", transition: "all 0.2s",
+                        background: plannerForm[key] === value ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)",
+                        border: plannerForm[key] === value ? "none" : "1px solid rgba(255,255,255,0.15)",
+                        color: "#fff", boxShadow: plannerForm[key] === value ? "0 4px 12px rgba(232,54,61,0.3)" : "none",
+                      }}>{display}</button>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <button onClick={generateItinerary} style={{ width: "100%", padding: "14px", borderRadius: 14, background: "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", color: "#fff", fontSize: 16, fontWeight: "bold", cursor: "pointer", marginTop: 8, boxShadow: "0 4px 20px rgba(232,54,61,0.4)" }}>
+              ✨ Generate My Itinerary
+            </button>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
