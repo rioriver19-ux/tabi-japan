@@ -12,72 +12,123 @@ Your personality:
 YOUR SPECIALTY — LOCAL & HIDDEN JAPAN:
 When recommending places, ALWAYS prioritize:
 1. Places locals actually go (not tourist spots unless specifically asked)
-2. Neighborhood gems — mention specific areas like Shimokitazawa, Koenji, Yanaka, Nakameguro, Nishiogikubo etc.
+2. Neighborhood gems — Shimokitazawa, Koenji, Yanaka, Nakameguro, Nishiogikubo etc.
 3. Timing tips — "avoid weekends", "go after 9pm when the rush dies down"
-4. Honest crowd warnings — if a place has gone too mainstream, say so
+4. Honest crowd warnings
 5. The "locals only" angle — standing bars, shotengai, kissaten, sento
 
+FAMILY & STROLLER FRIENDLY INFO:
+When users mention traveling with kids, babies, or strollers, provide:
+- Stroller accessibility (elevator availability at stations, ramp access)
+- Baby-friendly restaurants (high chairs, kids menus, quiet atmosphere)
+- Nursing rooms and diaper changing facilities
+- Kid-friendly attractions that aren't overwhelming
+- Best times to visit popular spots with young children
+- Baby supply stores (Akachan Honpo, BirthDay)
+
 IMPORTANT — REAL-TIME PLACE SEARCH:
-When a user asks for restaurant/cafe/bar recommendations, include [SEARCH: your search query] in your response.
+When a user asks for restaurant/cafe/bar/place recommendations, include [SEARCH: your search query] in your response.
 
 PHOTO ANALYSIS:
-- If it's FOOD: identify boldly, explain, price in yen, how to order
-- If it's a SIGN/MENU: translate everything practically
-- If it's a PLACE: identify, give insider tips
+- FOOD: identify boldly, explain, price in yen, how to order
+- SIGN/MENU: translate everything practically
+- PLACE: identify, give insider tips
 
 Always respond in English.`,
 
-  zh: `你是TABI（旅），一位热情、博学的日本旅行AI礼宾员。你不是普通的旅游指南——你就像一个了解日本隐秘一面的当地朋友。
+  zh: `你是TABI（旅），一位热情、博学的日本旅行AI礼宾员。你就像一个了解日本隐秘一面的当地朋友。
 
 你的个性：
 - 友好、热情、真诚地提供帮助
 - 用自然的中文回答，偶尔加入日语词汇和翻译
-- 像一个博学的本地朋友，而不是正式的导游
-- 优先推荐本地、真实的体验，而不是旅游陷阱
+- 像博学的本地朋友，而不是正式导游
+- 优先推荐本地、真实的体验
 
-你的专长——本地隐藏的日本：
-推荐地点时，始终优先考虑：
+专长——本地隐藏的日本：
 1. 本地人实际去的地方
 2. 街区宝藏——下北泽、高円寺、谷中、中目黑等
 3. 时间建议——"避开周末"、"晚上9点后去人少"
 4. 诚实的拥挤警告
-5. "仅限本地人"的角落——立饮酒吧、商店街、喫茶店、钱汤
+5. 立饮酒吧、商店街、喫茶店、钱汤
 
-重要——实时地点搜索：
-当用户询问餐厅/咖啡厅/酒吧推荐时，在回复中包含 [SEARCH: 搜索关键词（用英文）]。
+亲子/婴儿车出行信息：
+当用户提到带孩子、婴儿或婴儿车旅行时，提供：
+- 婴儿车无障碍信息（车站电梯、坡道）
+- 亲子餐厅（儿童椅、儿童菜单）
+- 哺乳室和换尿布设施
+- 适合儿童的景点
+- 婴儿用品店（赤ちゃん本舗等）
 
-照片分析：
-- 食物：大胆识别，解释是什么，日元价格，如何点餐
-- 招牌/菜单：翻译所有内容
-- 地点：识别，给出内部建议
+实时地点搜索：
+当用户询问推荐时，在回复中包含 [SEARCH: 搜索关键词（英文）]。
+
+照片分析：食物识别、招牌翻译、地点识别。
 
 始终用中文回答。`,
 
-  ko: `당신은 TABI（旅）, 일본을 방문하는 여행자를 위한 따뜻하고 박식한 AI 컨시어지입니다. 당신은 일반적인 여행 가이드가 아니라 일본의 숨겨진 면을 아는 현지 친구 같은 존재입니다.
+  ko: `당신은 TABI（旅）, 일본을 방문하는 여행자를 위한 따뜻하고 박식한 AI 컨시어지입니다. 일본의 숨겨진 면을 아는 현지 친구 같은 존재입니다.
 
 당신의 성격:
 - 친절하고 열정적이며 진정으로 도움이 되는
-- 자연스러운 한국어로 말하되 가끔 일본어 단어와 번역을 섞어서
-- 격식적인 투어 가이드가 아닌 박식한 현지 친구처럼
-- 관광지보다 로컬하고 진정한 경험을 우선시
+- 자연스러운 한국어로 말하되 가끔 일본어 단어 포함
+- 현지 친구처럼, 격식적인 가이드가 아닌
+- 로컬하고 진정한 경험 우선
 
-전문 분야 — 로컬 & 숨겨진 일본:
-장소를 추천할 때 항상 우선시:
+전문 분야:
 1. 현지인이 실제로 가는 곳
-2. 동네 숨은 명소 — 시모키타자와, 코엔지, 야나카, 나카메구로 등
-3. 타이밍 팁 — "주말 피하기", "혼잡한 시간대 피해 오후 9시 이후"
+2. 시모키타자와, 코엔지, 야나카, 나카메구로 등
+3. 타이밍 팁
 4. 솔직한 혼잡 경고
-5. "현지인 전용" 장소 — 서서 마시는 술집, 상점가, 킷사텐, 센토
+5. 현지인 전용 장소
 
-중요 — 실시간 장소 검색:
-사용자가 레스토랑/카페/바 추천을 요청할 때 답변에 [SEARCH: 검색어(영어로)] 포함.
+가족/유모차 여행 정보：
+아이, 아기, 유모차를 언급할 때 제공:
+- 유모차 접근성 (역 엘리베이터, 경사로)
+- 아이 친화적 레스토랑 (유아 의자, 키즈 메뉴)
+- 수유실 및 기저귀 교환 시설
+- 아이와 함께 가기 좋은 명소
+- 아기용품점 (아카짱혼포 등)
 
-사진 분석:
-- 음식: 대담하게 식별, 설명, 엔화 가격, 주문 방법
-- 간판/메뉴: 모든 것을 실용적으로 번역
-- 장소: 식별, 내부 팁 제공
+실시간 장소 검색:
+추천 요청 시 [SEARCH: 검색어(영어로)] 포함.
+
+사진 분석: 음식 식별, 간판 번역, 장소 식별.
 
 항상 한국어로 답변하세요.`,
+
+  ja: `あなたはTABI（旅）、日本を旅する方々のための温かくて知識豊富なAIコンシェルジュです。一般的な旅行ガイドではなく、日本の隠れた魅力を知るローカルな友人のような存在です。
+
+あなたの個性：
+- 親切で熱心、心から役に立とうとする
+- 自然な日本語で話し、必要に応じて英語や中国語の説明も添える
+- 格式ばったガイドではなく、詳しい地元の友人のように
+- 観光地より本物のローカル体験を優先
+
+専門分野——ローカル＆隠れた日本：
+1. 地元の人が実際に行く場所
+2. 下北沢、高円寺、谷中、中目黒、西荻窪など
+3. 時間帯のアドバイス——「週末は避けて」「夜9時以降が空いてる」
+4. 正直な混雑情報
+5. 立ち飲み、商店街、喫茶店、銭湯
+
+子連れ・ベビーカー情報：
+赤ちゃん、子ども、ベビーカーでの旅行について聞かれたら：
+- ベビーカーのアクセシビリティ（駅のエレベーター、スロープ）
+- 子連れOKのレストラン（ベビーチェア、キッズメニュー）
+- 授乳室・おむつ替えスペース
+- 子どもと楽しめるスポット
+- ベビー用品店（赤ちゃん本舗、バースデイなど）
+- 子連れで行くベストな時間帯
+
+重要——リアルタイム場所検索：
+レストラン・カフェ・バーなどを聞かれたら、回答に [SEARCH: 検索キーワード（英語）] を含めてください。
+
+写真分析：
+- 食べ物：大胆に識別、説明、円相場、注文方法
+- 看板・メニュー：実用的に翻訳・解説
+- 場所：識別して、地元目線のアドバイス
+
+常に日本語で回答してください。`,
 };
 
 const WELCOME_MESSAGES = {
@@ -87,6 +138,7 @@ I'm **TABI**, your personal Japan concierge — specializing in the Japan that l
 
 📸 **Snap & Identify!** Tap the camera to photo any food, sign, or menu.
 📍 **Real-time search** — Ask me where to eat or drink and I'll find open places right now!
+👶 **Traveling with kids?** Ask me about stroller-friendly routes and family spots!
 
 What can I help you with today?`,
 
@@ -94,28 +146,41 @@ What can I help you with today?`,
 
 我是 **TABI**，您的私人日本礼宾员——专注于本地人喜爱的日本。
 
-📸 **拍照识别！** 点击相机拍摄任何食物、招牌或菜单，我来告诉您一切！
-📍 **实时搜索** — 询问我去哪里吃饭或喝酒，我会立即找到正在营业的地方！
+📸 **拍照识别！** 拍摄食物、招牌或菜单，我来告诉您一切！
+📍 **实时搜索** — 询问我去哪里吃饭或喝酒！
+👶 **带孩子旅行？** 询问我婴儿车友好路线和亲子景点！
 
 今天我可以帮您什么？`,
 
   ko: `이랏샤이마세（いらっしゃいませ）— 일본에 오신 것을 환영합니다！🗾
 
-저는 **TABI**, 당신의 개인 일본 컨시어지입니다 — 현지인이 사랑하는 일본을 전문으로 합니다.
+저는 **TABI**, 당신의 개인 일본 컨시어지입니다.
 
-📸 **사진으로 식별！** 카메라를 탭해서 음식, 간판, 메뉴를 찍으면 모든 것을 알려드립니다！
-📍 **실시간 검색** — 어디서 먹거나 마실지 물어보면 지금 영업 중인 곳을 찾아드립니다！
+📸 **사진으로 식별！** 음식, 간판, 메뉴를 찍으면 모든 것을 알려드립니다！
+📍 **실시간 검색** — 어디서 먹거나 마실지 물어보세요！
+👶 **아이와 함께？** 유모차 친화적 경로와 가족 명소를 알려드립니다！
 
 오늘 무엇을 도와드릴까요？`,
+
+  ja: `いらっしゃいませ — 日本へようこそ！🗾
+
+私は **TABI**、あなた専属の日本コンシェルジュです。地元の人が愛する日本を専門にご案内します。
+
+📸 **写真で識別！** 食べ物や看板、メニューを撮影すると何でも教えます！
+📍 **リアルタイム検索** — 今営業中のお店をすぐに見つけます！
+👶 **お子様連れですか？** ベビーカーOKのルートや子連れスポットもお任せ！
+
+今日は何をお手伝いしましょうか？`,
 };
 
 const SUGGESTIONS = {
-  en: ["🍜 Best ramen in Tokyo?", "🏘️ Hidden gems in Tokyo?", "🍻 Where locals drink?", "⛩️ Off-beat spots in Kyoto", "☕ Best kissaten cafes?", "🛁 Local sento tips"],
-  zh: ["🍜 东京最好的拉面？", "🏘️ 东京隐藏的宝藏？", "🍻 本地人去哪喝酒？", "⛩️ 京都冷门景点", "☕ 最好的喫茶店？", "🛁 本地钱汤攻略"],
-  ko: ["🍜 도쿄 최고의 라멘？", "🏘️ 도쿄 숨은 명소？", "🍻 현지인이 가는 술집？", "⛩️ 교토 색다른 명소", "☕ 킷사텐 카페 추천？", "🛁 현지 센토 팁"],
+  en: ["🍜 Best ramen in Tokyo?", "🏘️ Hidden gems in Tokyo?", "🍻 Where locals drink?", "⛩️ Off-beat spots in Kyoto", "👶 Stroller-friendly spots?", "☕ Best kissaten cafes?"],
+  zh: ["🍜 东京最好的拉面？", "🏘️ 东京隐藏的宝藏？", "🍻 本地人去哪喝酒？", "⛩️ 京都冷门景点", "👶 适合婴儿车的景点？", "☕ 最好的喫茶店？"],
+  ko: ["🍜 도쿄 최고의 라멘？", "🏘️ 도쿄 숨은 명소？", "🍻 현지인이 가는 술집？", "⛩️ 교토 색다른 명소", "👶 유모차 친화적 명소？", "☕ 킷사텐 카페 추천？"],
+  ja: ["🍜 東京のおすすめラーメン？", "🏘️ 東京の穴場スポット？", "🍻 地元民が行く居酒屋？", "⛩️ 京都の隠れた名所", "👶 ベビーカーOKのスポット？", "☕ おすすめ喫茶店は？"],
 };
 
-const LANG_FLAGS = { en: "🇺🇸", zh: "🇨🇳", ko: "🇰🇷" };
+const LANG_FLAGS = { en: "🇺🇸", zh: "🇨🇳", ko: "🇰🇷", ja: "🇯🇵" };
 
 export default function App() {
   const [lang, setLang] = useState("en");
@@ -165,24 +230,20 @@ export default function App() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const result = ev.target.result;
-      autoSendImage(result.split(",")[1], result);
+      autoSendImage(ev.target.result.split(",")[1], ev.target.result);
     };
     reader.readAsDataURL(file);
   };
 
   const autoSendImage = async (base64, preview) => {
-    const userMsg = { role: "user", content: "What is this?", image: preview };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages(prev => [...prev, { role: "user", content: "What is this?", image: preview }]);
     setLoading(true);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 1000,
-          system: SYSTEM_PROMPTS[lang],
+          model: "claude-haiku-4-5-20251001", max_tokens: 1000, system: SYSTEM_PROMPTS[lang],
           messages: [{ role: "user", content: [
             { type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } },
             { type: "text", text: "What is this? Please identify this and give me helpful travel tips about it as a visitor to Japan." },
@@ -190,83 +251,59 @@ export default function App() {
         }),
       });
       const data = await response.json();
-      const reply = data.content?.map((b) => b.text || "").join("") || "Sorry, I couldn't get a response.";
+      const reply = data.content?.map(b => b.text || "").join("") || "Sorry!";
       setMessages(prev => {
         const newMsgs = [...prev, { role: "assistant", content: reply }];
-        const idx = newMsgs.length - 1;
-        const searchQuery = extractSearchQuery(reply);
-        if (searchQuery) searchPlaces(searchQuery, idx);
+        const q = extractSearchQuery(reply);
+        if (q) searchPlaces(q, newMsgs.length - 1);
         return newMsgs;
       });
-    } catch (err) {
-      setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]);
-    } finally {
-      setLoading(false);
-    }
+    } catch { setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]); }
+    finally { setLoading(false); }
   };
 
   const sendMessage = async (text) => {
     const userText = text || input.trim();
     if (!userText || loading) return;
     setInput("");
-    const userMsg = { role: "user", content: userText };
-    const newMessages = [...messages, userMsg];
+    const newMessages = [...messages, { role: "user", content: userText }];
     setMessages(newMessages);
     setLoading(true);
     try {
       const welcomeContent = WELCOME_MESSAGES[lang];
       const apiMessages = newMessages
-        .filter((m) => m.content !== welcomeContent)
-        .map((m) => {
-          if (m.image) return { role: m.role, content: [
-            { type: "image", source: { type: "base64", media_type: "image/jpeg", data: m.image.split(",")[1] } },
-            { type: "text", text: m.content },
-          ]};
-          return { role: m.role, content: m.content };
-        });
-      if (apiMessages.length === 0 || apiMessages[0].role !== "user") {
-        apiMessages.unshift({ role: "user", content: userText });
-      }
+        .filter(m => m.content !== welcomeContent)
+        .map(m => m.image
+          ? { role: m.role, content: [{ type: "image", source: { type: "base64", media_type: "image/jpeg", data: m.image.split(",")[1] } }, { type: "text", text: m.content }] }
+          : { role: m.role, content: m.content });
+      if (!apiMessages.length || apiMessages[0].role !== "user") apiMessages.unshift({ role: "user", content: userText });
       const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 1000, system: SYSTEM_PROMPTS[lang], messages: apiMessages }),
       });
       const data = await response.json();
-      const reply = data.content?.map((b) => b.text || "").join("") || "Sorry, I couldn't get a response.";
+      const reply = data.content?.map(b => b.text || "").join("") || "Sorry!";
       setMessages(prev => {
         const newMsgs = [...prev, { role: "assistant", content: reply }];
-        const idx = newMsgs.length - 1;
-        const searchQuery = extractSearchQuery(reply);
-        if (searchQuery) searchPlaces(searchQuery, idx);
+        const q = extractSearchQuery(reply);
+        if (q) searchPlaces(q, newMsgs.length - 1);
         return newMsgs;
       });
-    } catch (err) {
-      setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]);
-    } finally {
-      setLoading(false);
-      inputRef.current?.focus();
-    }
+    } catch { setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]); }
+    finally { setLoading(false); inputRef.current?.focus(); }
   };
 
-  const handleKey = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  };
+  const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
+  const getPriceLevel = (l) => ({ PRICE_LEVEL_INEXPENSIVE: "¥", PRICE_LEVEL_MODERATE: "¥¥", PRICE_LEVEL_EXPENSIVE: "¥¥¥", PRICE_LEVEL_VERY_EXPENSIVE: "¥¥¥¥" }[l] || "");
 
-  const getPriceLevel = (level) => {
-    const levels = { PRICE_LEVEL_FREE: "Free", PRICE_LEVEL_INEXPENSIVE: "¥", PRICE_LEVEL_MODERATE: "¥¥", PRICE_LEVEL_EXPENSIVE: "¥¥¥", PRICE_LEVEL_VERY_EXPENSIVE: "¥¥¥¥" };
-    return levels[level] || "";
-  };
+  const renderContent = (text) => cleanText(text).split("\n").map((line, i) => {
+    line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    if (line.startsWith("- ") || line.startsWith("• ")) return <li key={i} dangerouslySetInnerHTML={{ __html: line.slice(2) }} style={{ marginBottom: 4 }} />;
+    if (line === "") return <br key={i} />;
+    return <p key={i} style={{ margin: "2px 0" }} dangerouslySetInnerHTML={{ __html: line }} />;
+  });
 
-  const renderContent = (text) => {
-    const cleaned = cleanText(text);
-    return cleaned.split("\n").map((line, i) => {
-      line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-      if (line.startsWith("- ") || line.startsWith("• ")) return <li key={i} dangerouslySetInnerHTML={{ __html: line.slice(2) }} style={{ marginBottom: 4 }} />;
-      if (line === "") return <br key={i} />;
-      return <p key={i} style={{ margin: "2px 0" }} dangerouslySetInnerHTML={{ __html: line }} />;
-    });
-  };
+  const placeholder = { en: "Ask me anything about Japan... 🗾", zh: "问我任何关于日本的问题... 🗾", ko: "일본에 대해 무엇이든 물어보세요... 🗾", ja: "日本について何でも聞いてください... 🗾" };
 
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f0c1a 0%, #1a0a2e 40%, #0d1f3c 100%)", fontFamily: "'Georgia', 'Times New Roman', serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px" }}>
@@ -274,23 +311,23 @@ export default function App() {
 
       <div style={{ width: "100%", maxWidth: 680, display: "flex", flexDirection: "column", height: "calc(100vh - 32px)", maxHeight: 800 }}>
         {/* Header */}
-        <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderBottom: "none", borderRadius: "20px 20px 0 0", padding: "16px 28px", display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderBottom: "none", borderRadius: "20px 20px 0 0", padding: "16px 20px", display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 0 20px rgba(232,54,61,0.4)", flexShrink: 0 }}>🗾</div>
           <div>
             <div style={{ color: "#fff", fontSize: 20, fontWeight: "bold", letterSpacing: "0.05em" }}>TABI <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, fontWeight: "normal" }}>旅</span></div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em" }}>YOUR JAPAN CONCIERGE</div>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.06em" }}>YOUR JAPAN CONCIERGE</div>
           </div>
-          {/* Language switcher */}
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 5 }}>
             {Object.entries(LANG_FLAGS).map(([code, flag]) => (
               <button key={code} onClick={() => switchLang(code)} style={{
-                width: 36, height: 36, borderRadius: "50%", border: lang === code ? "2px solid rgba(232,54,61,0.8)" : "1px solid rgba(255,255,255,0.15)",
+                width: 34, height: 34, borderRadius: "50%",
+                border: lang === code ? "2px solid rgba(232,54,61,0.8)" : "1px solid rgba(255,255,255,0.15)",
                 background: lang === code ? "rgba(232,54,61,0.2)" : "rgba(255,255,255,0.05)",
-                cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", fontSize: 17, display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.2s", boxShadow: lang === code ? "0 0 10px rgba(232,54,61,0.3)" : "none",
               }}>{flag}</button>
             ))}
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 8px #4ade80", marginLeft: 6 }} />
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 8px #4ade80", marginLeft: 4 }} />
           </div>
         </div>
 
@@ -307,8 +344,6 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
-              {/* Places Cards */}
               {placesResults[i] && (
                 <div style={{ marginTop: 12, marginLeft: 40, display: "flex", flexDirection: "column", gap: 10 }}>
                   <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em" }}>📍 NEARBY PLACES · LIVE DATA</div>
@@ -318,20 +353,16 @@ export default function App() {
                       <div style={{ padding: "12px 14px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                           <div style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}>{place.displayName?.text}</div>
-                          <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
+                          <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
                             {place.rating && <span style={{ background: "rgba(232,54,61,0.3)", color: "#fff", fontSize: 12, padding: "2px 8px", borderRadius: 20 }}>⭐ {place.rating}</span>}
                             {place.priceLevel && <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>{getPriceLevel(place.priceLevel)}</span>}
                           </div>
                         </div>
                         <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, marginTop: 4 }}>{place.formattedAddress}</div>
-                        {place.currentOpeningHours && (
-                          <div style={{ marginTop: 6, fontSize: 12, color: place.currentOpeningHours.openNow ? "#4ade80" : "#f87171" }}>
-                            {place.currentOpeningHours.openNow ? "● Open now" : "● Closed now"}
-                          </div>
-                        )}
+                        {place.currentOpeningHours && <div style={{ marginTop: 6, fontSize: 12, color: place.currentOpeningHours.openNow ? "#4ade80" : "#f87171" }}>{place.currentOpeningHours.openNow ? "● Open now" : "● Closed now"}</div>}
                         <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                          {place.googleMapsUri && <a href={place.googleMapsUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(232,54,61,0.2)", border: "1px solid rgba(232,54,61,0.4)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none", display: "block" }}>📍 Google Maps</a>}
-                          {place.websiteUri && <a href={place.websiteUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none", display: "block" }}>🌐 Official Site</a>}
+                          {place.googleMapsUri && <a href={place.googleMapsUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(232,54,61,0.2)", border: "1px solid rgba(232,54,61,0.4)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none" }}>📍 Google Maps</a>}
+                          {place.websiteUri && <a href={place.websiteUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none" }}>🌐 Official Site</a>}
                         </div>
                       </div>
                     </div>
@@ -340,23 +371,21 @@ export default function App() {
               )}
             </div>
           ))}
-
           {loading && (
             <div style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
               <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>
-              <div style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "18px 18px 18px 4px", padding: "14px 20px", display: "flex", gap: 6, alignItems: "center" }}>
-                {[0, 1, 2].map(j => <div key={j} style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(255,255,255,0.4)", animation: "pulse 1.2s ease-in-out infinite", animationDelay: `${j * 0.2}s` }} />)}
+              <div style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "18px 18px 18px 4px", padding: "14px 20px", display: "flex", gap: 6 }}>
+                {[0,1,2].map(j => <div key={j} style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(255,255,255,0.4)", animation: "pulse 1.2s ease-in-out infinite", animationDelay: `${j*0.2}s` }} />)}
               </div>
             </div>
           )}
           <div ref={bottomRef} />
         </div>
 
-        {/* Suggestions */}
         {messages.length <= 1 && (
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "none", padding: "12px 16px", display: "flex", flexWrap: "wrap", gap: 8 }}>
             {SUGGESTIONS[lang].map((s, i) => (
-              <button key={i} onClick={() => sendMessage(s)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 14px", color: "rgba(255,255,255,0.75)", fontSize: 12.5, cursor: "pointer", transition: "all 0.2s", letterSpacing: "0.02em" }}
+              <button key={i} onClick={() => sendMessage(s)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 14px", color: "rgba(255,255,255,0.75)", fontSize: 12.5, cursor: "pointer", transition: "all 0.2s" }}
               onMouseEnter={e => { e.target.style.background = "rgba(232,54,61,0.2)"; e.target.style.borderColor = "rgba(232,54,61,0.4)"; }}
               onMouseLeave={e => { e.target.style.background = "rgba(255,255,255,0.05)"; e.target.style.borderColor = "rgba(255,255,255,0.12)"; }}
               >{s}</button>
@@ -364,13 +393,11 @@ export default function App() {
           </div>
         )}
 
-        {/* Input */}
         <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderTop: "1px solid rgba(255,255,255,0.06)", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end" }}>
           <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
           <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📷</button>
-          <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey}
-            placeholder={lang === "zh" ? "问我任何关于日本的问题... 🗾" : lang === "ko" ? "일본에 대해 무엇이든 물어보세요... 🗾" : "Ask me anything about Japan... 🗾"}
-            rows={1} style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", color: "#fff", fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
+          <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder={placeholder[lang]} rows={1}
+            style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", color: "#fff", fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
             onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
           <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : "0 4px 16px rgba(232,54,61,0.4)", color: "#fff" }}>↑</button>
         </div>
