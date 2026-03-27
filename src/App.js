@@ -29,6 +29,9 @@ When users mention traveling with kids, babies, or strollers, provide:
 IMPORTANT — REAL-TIME PLACE SEARCH:
 When a user asks for restaurant/cafe/bar/place recommendations, include [SEARCH: your search query] in your response.
 
+PLACE NAME FORMATTING:
+When mentioning specific places (markets, temples, stations, restaurants, neighborhoods, streets), wrap them in square brackets like this: [Tsukiji Outer Market], [Yanaka Ginza], [Shimokitazawa], [Keio Inokashira Line]. This creates clickable map links for the user.
+
 PHOTO ANALYSIS:
 - FOOD: identify boldly, explain, price in yen, how to order
 - SIGN/MENU: translate everything practically
@@ -62,6 +65,8 @@ Always respond in English.`,
 实时地点搜索：
 当用户询问推荐时，在回复中包含 [SEARCH: 搜索关键词（英文）]。
 
+地名格式：提到具体地点时（市场、寺庙、车站、餐厅、街道），用方括号包围：[筑地外市场]、[谷中银座]、[下北泽]。
+
 照片分析：食物识别、招牌翻译、地点识别。
 
 始终用中文回答。`,
@@ -91,6 +96,8 @@ Always respond in English.`,
 
 실시간 장소 검색:
 추천 요청 시 [SEARCH: 검색어(영어로)] 포함.
+
+장소명 형식: 특정 장소를 언급할 때 대괄호로 감싸세요: [츠키지 외시장], [야나카 긴자], [시모키타자와].
 
 사진 분석: 음식 식별, 간판 번역, 장소 식별.
 
@@ -122,6 +129,8 @@ Always respond in English.`,
 
 重要——リアルタイム場所検索：
 レストラン・カフェ・バーなどを聞かれたら、回答に [SEARCH: 検索キーワード（英語）] を含めてください。
+
+場所名フォーマット：具体的な場所を言及するときは角括弧で囲んでください：[築地外市場]、[谷中銀座]、[下北沢]、[京王井の頭線]。これによりクリックできるマップリンクになります。
 
 写真分析：
 - 食べ物：大胆に識別、説明、円相場、注文方法
@@ -363,10 +372,10 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
   const isItinerary = (text) => text.includes("Day 1") || text.includes("## Day") || text.includes("**Day");
 
   const addMapLinks = (text) => {
-    // Known Japan place patterns - capitalized words followed by common place indicators
-    return text.replace(/([A-Z][a-zA-Z\s　-鿿（）()]+(?:Market|Temple|Shrine|Station|Street|Park|Museum|District|Garden|Tower|Castle|Line|Area|Alley|Bar|Cafe|Ramen|Restaurant|Inn|Hotel|Mall|Store|Shop))/g, (match) => {
-      const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(match + " Japan")}`;
-      return `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" style="color:#ff8080;text-decoration:underline;text-decoration-style:dotted;">${match}</a>`;
+    // Match [Place Name] format that AI uses
+    return text.replace(/\[([^\]]+)\]/g, (match, placeName) => {
+      const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(placeName + " Japan")}`;
+      return `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" style="color:#ff8080;text-decoration:underline;text-decoration-style:dotted;font-weight:bold;">${placeName} 📍</a>`;
     });
   };
 
