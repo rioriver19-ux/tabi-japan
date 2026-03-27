@@ -405,7 +405,21 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
       <div style={{ width: "100%", maxWidth: 680, display: "flex", flexDirection: "column", height: "calc(100vh - 32px)", maxHeight: 800 }}>
         {/* Header */}
         <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderBottom: "none", borderRadius: "20px 20px 0 0", padding: "16px 20px", display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 0 20px rgba(232,54,61,0.4)", flexShrink: 0 }}>🗾</div>
+          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 20px rgba(232,54,61,0.4)", flexShrink: 0, overflow: "hidden" }}>
+            <svg viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sunG" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f5c842"/>
+                  <stop offset="100%" stopColor="#e8a020"/>
+                </linearGradient>
+              </defs>
+              <circle cx="33" cy="16" r="7" fill="url(#sunG)" opacity="0.9"/>
+              <polygon points="22,8 6,34 38,34" fill="white" opacity="0.95"/>
+              <polygon points="22,8 14,22 30,22" fill="#e8363d"/>
+              <polygon points="22,8 16,18 28,18" fill="white"/>
+              <rect x="4" y="33" width="36" height="1.5" fill="white" opacity="0.4" rx="1"/>
+            </svg>
+          </div>
           <div>
             <div style={{ color: "#fff", fontSize: 20, fontWeight: "bold", letterSpacing: "0.05em" }}>TABI <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, fontWeight: "normal" }}>旅</span></div>
             <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.06em" }}>YOUR JAPAN CONCIERGE</div>
@@ -430,7 +444,23 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
           {messages.map((msg, i) => (
             <div key={i}>
               <div style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", gap: 10, alignItems: "flex-end" }}>
-                {msg.role === "assistant" && <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>}
+                {msg.role === "assistant" && (
+                  <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                    <svg viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient id="sunS" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#f5c842"/>
+                          <stop offset="100%" stopColor="#e8a020"/>
+                        </linearGradient>
+                      </defs>
+                      <circle cx="22" cy="10" r="5" fill="url(#sunS)" opacity="0.9"/>
+                      <polygon points="15,4 3,24 27,24" fill="white" opacity="0.95"/>
+                      <polygon points="15,4 9,14 21,14" fill="#e8363d"/>
+                      <polygon points="15,4 10,12 20,12" fill="white"/>
+                      <rect x="2" y="23" width="26" height="1.5" fill="white" opacity="0.4" rx="1"/>
+                    </svg>
+                  </div>
+                )}
                 <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
                   {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
                   <div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}>
