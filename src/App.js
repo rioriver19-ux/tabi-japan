@@ -11,33 +11,30 @@ Your personality:
 YOUR SPECIALTY — LOCAL & HIDDEN JAPAN:
 When recommending places, ALWAYS prioritize:
 1. Places locals actually go (not tourist spots unless specifically asked)
-2. Neighborhood gems — mention specific areas like Shimokitazawa (下北沢), Koenji (高円寺), Yanaka (谷中), Nakameguro, Shimizu, Nishiogikubo etc.
-3. Timing tips — "avoid weekends", "go after 9pm when the rush dies down", "Tuesday lunch is quietest"
-4. Honest crowd warnings — if a place has gone too mainstream, say so and suggest alternatives
-5. The "locals only" angle — standing bars (tachinomi), shotengai (shopping streets), kissaten (old-school coffee shops), sento (public baths)
+2. Neighborhood gems — mention specific areas like Shimokitazawa, Koenji, Yanaka, Nakameguro, Nishiogikubo etc.
+3. Timing tips — "avoid weekends", "go after 9pm when the rush dies down"
+4. Honest crowd warnings — if a place has gone too mainstream, say so
+5. The "locals only" angle — standing bars, shotengai, kissaten, sento
 
-NEIGHBORHOOD PERSONALITY GUIDE (use this to match vibes):
-- Shimokitazawa: vintage shops, live music, young creatives, indie cafes
-- Koenji: punk/alternative scene, retro culture, cheap eats, vinyl records  
-- Yanaka: old Tokyo atmosphere, temples, cats, traditional crafts, tofu shops
-- Nakameguro: canal walks, trendy but still local coffee, boutiques
-- Nishiogikubo: antiques, quiet cafes, families, hidden ramen
-- Sangenjaya: izakayas, young locals, nightlife without tourists
-- Togoshi Ginza: longest shotengai in Japan, ultra-local shopping street
-- Kagurazaka: French-Japanese fusion neighborhood, hidden alleys (横丁)
+IMPORTANT — REAL-TIME PLACE SEARCH:
+When a user asks for restaurant/cafe/bar recommendations or asks "where to eat/drink/go", you MUST include the special tag [SEARCH: your search query] somewhere in your response. This will trigger a real-time Google Places search.
 
-When someone asks for food/places, ask ONE clarifying question if needed:
-"Are you looking for a touristy experience or more local vibes?" or "What neighborhood are you in?"
+Examples:
+- User asks "best ramen in Shinjuku" → include [SEARCH: best ramen Shinjuku Tokyo]
+- User asks "local bar in Shimokitazawa" → include [SEARCH: local izakaya bar Shimokitazawa Tokyo]
+- User asks "coffee shop in Kyoto" → include [SEARCH: specialty coffee Kyoto]
+- User asks "hidden gems in Tokyo" → include [SEARCH: local hidden gem restaurant Tokyo]
+
+Format your response naturally, then add the search tag. The search results will be shown as cards below your message.
 
 PHOTO ANALYSIS:
-- If it's FOOD: identify the dish name boldly (e.g. "🍜 This is **Tonkotsu Ramen**!"), explain what it is, typical price (in yen), how to order, must-try verdict
-- If it's a SIGN/MENU in Japanese: translate everything and explain practically
-- If it's a PLACE/STREET: identify if possible, give insider tips
+- If it's FOOD: identify boldly (e.g. "🍜 This is Tonkotsu Ramen!"), explain, price in yen, how to order
+- If it's a SIGN/MENU: translate everything practically
+- If it's a PLACE: identify, give insider tips
 
 Rules:
 - Keep responses concise but warm
-- Bullet points when listing options
-- Add fun local facts when relevant
+- Bullet points when listing options  
 - Use emoji sparingly
 - If asked about something outside Japan travel, gently redirect`;
 
@@ -54,11 +51,10 @@ const WelcomeMessage = {
   role: "assistant",
   content: `Irasshaimase（いらっしゃいませ）— Welcome to Japan! 🗾
 
-I'm **TABI**, your personal Japan concierge — specializing in the Japan that locals love, not just the guidebooks.
+I'm **TABI**, your personal Japan concierge — specializing in the Japan that locals love.
 
-📸 **Snap & Identify!** Tap the camera to photo any food, sign, or menu for instant info.
-
-🏘️ **Local vibes only** — ask me for hidden gems, neighborhood bars, and places tourists don't know about.
+📸 **Snap & Identify!** Tap the camera to photo any food, sign, or menu.
+📍 **Real-time search** — Ask me where to eat or drink and I'll find open places right now!
 
 What can I help you with today?`,
 };
@@ -67,6 +63,7 @@ export default function App() {
   const [messages, setMessages] = useState([WelcomeMessage]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [placesResults, setPlacesResults] = useState({});
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   const cameraInputRef = useRef(null);
@@ -74,6 +71,31 @@ export default function App() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  const searchPlaces = async (query, messageIndex) => {
+    try {
+      const response = await fetch("/api/places", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      const data = await response.json();
+      if (data.places && data.places.length > 0) {
+        setPlacesResults(prev => ({ ...prev, [messageIndex]: data.places }));
+      }
+    } catch (err) {
+      console.error("Places search failed:", err);
+    }
+  };
+
+  const extractSearchQuery = (text) => {
+    const match = text.match(/\[SEARCH:\s*(.+?)\]/);
+    return match ? match[1].trim() : null;
+  };
+
+  const cleanText = (text) => {
+    return text.replace(/\[SEARCH:\s*.+?\]/g, "").trim();
+  };
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
@@ -110,9 +132,15 @@ export default function App() {
       });
       const data = await response.json();
       const reply = data.content?.map((b) => b.text || "").join("") || "Sorry, I couldn't get a response.";
-      setMessages(prev => [...prev, { role: "assistant", content: reply }]);
+      setMessages(prev => {
+        const newMessages = [...prev, { role: "assistant", content: reply }];
+        const idx = newMessages.length - 1;
+        const searchQuery = extractSearchQuery(reply);
+        if (searchQuery) searchPlaces(searchQuery, idx);
+        return newMessages;
+      });
     } catch (err) {
-      setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen（すみません）— something went wrong. Please try again!" }]);
+      setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen（すみません）— something went wrong!" }]);
     } finally {
       setLoading(false);
     }
@@ -161,9 +189,16 @@ export default function App() {
 
       const data = await response.json();
       const reply = data.content?.map((b) => b.text || "").join("") || "Sorry, I couldn't get a response.";
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      
+      setMessages(prev => {
+        const newMsgs = [...prev, { role: "assistant", content: reply }];
+        const idx = newMsgs.length - 1;
+        const searchQuery = extractSearchQuery(reply);
+        if (searchQuery) searchPlaces(searchQuery, idx);
+        return newMsgs;
+      });
     } catch (err) {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Sumimasen（すみません）— something went wrong. Please try again!" }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Sumimasen（すみません）— something went wrong!" }]);
     } finally {
       setLoading(false);
       inputRef.current?.focus();
@@ -177,8 +212,14 @@ export default function App() {
     }
   };
 
+  const getPriceLevel = (level) => {
+    const levels = { PRICE_LEVEL_FREE: "Free", PRICE_LEVEL_INEXPENSIVE: "¥", PRICE_LEVEL_MODERATE: "¥¥", PRICE_LEVEL_EXPENSIVE: "¥¥¥", PRICE_LEVEL_VERY_EXPENSIVE: "¥¥¥¥" };
+    return levels[level] || "";
+  };
+
   const renderContent = (text) => {
-    const lines = text.split("\n");
+    const cleaned = cleanText(text);
+    const lines = cleaned.split("\n");
     return lines.map((line, i) => {
       line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
       if (line.startsWith("- ") || line.startsWith("• ")) {
@@ -210,18 +251,50 @@ export default function App() {
         {/* Messages */}
         <div style={{ flex: 1, overflowY: "auto", background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.08)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "none", padding: "24px 20px", display: "flex", flexDirection: "column", gap: 16, scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.1) transparent" }}>
           {messages.map((msg, i) => (
-            <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", gap: 10, alignItems: "flex-end" }}>
-              {msg.role === "assistant" && (
-                <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>
-              )}
-              <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
-                {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
-                <div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}>
-                  {renderContent(msg.content)}
+            <div key={i}>
+              <div style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", gap: 10, alignItems: "flex-end" }}>
+                {msg.role === "assistant" && (
+                  <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>
+                )}
+                <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
+                  {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
+                  <div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}>
+                    {renderContent(msg.content)}
+                  </div>
                 </div>
               </div>
+
+              {/* Places Cards */}
+              {placesResults[i] && (
+                <div style={{ marginTop: 12, marginLeft: 40, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em", marginBottom: 4 }}>📍 NEARBY PLACES · LIVE DATA</div>
+                  {placesResults[i].map((place, j) => (
+                    <a key={j} href={place.googleMapsUri} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                      <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", cursor: "pointer", transition: "all 0.2s" }}
+                        onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
+                        onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                          <div style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}>{place.displayName?.text}</div>
+                          <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
+                            {place.rating && <span style={{ background: "rgba(232,54,61,0.3)", color: "#fff", fontSize: 12, padding: "2px 8px", borderRadius: 20 }}>⭐ {place.rating}</span>}
+                            {place.priceLevel && <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>{getPriceLevel(place.priceLevel)}</span>}
+                          </div>
+                        </div>
+                        <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, marginTop: 4 }}>{place.formattedAddress}</div>
+                        {place.currentOpeningHours && (
+                          <div style={{ marginTop: 6, fontSize: 12, color: place.currentOpeningHours.openNow ? "#4ade80" : "#f87171" }}>
+                            {place.currentOpeningHours.openNow ? "● Open now" : "● Closed now"}
+                          </div>
+                        )}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
+
           {loading && (
             <div style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
               <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>
@@ -248,7 +321,7 @@ export default function App() {
         {/* Input */}
         <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderTop: "1px solid rgba(255,255,255,0.06)", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end" }}>
           <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
-          <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, transition: "all 0.2s" }} title="Take a photo">📷</button>
+          <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, transition: "all 0.2s" }}>📷</button>
           <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder="Ask me anything about Japan... 🗾" rows={1} style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", color: "#fff", fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
             onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
           <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : "0 4px 16px rgba(232,54,61,0.4)", color: "#fff" }}>↑</button>
