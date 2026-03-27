@@ -183,8 +183,16 @@ const SUGGESTIONS = {
 const LANG_FLAGS = { en: "🇺🇸", zh: "🇨🇳", ko: "🇰🇷", ja: "🇯🇵" };
 
 export default function App() {
-  const [lang, setLang] = useState("en");
-  const [messages, setMessages] = useState([{ role: "assistant", content: WELCOME_MESSAGES["en"] }]);
+  const [lang, setLang] = useState(() => {
+    try { return localStorage.getItem("tabi_lang") || "en"; } catch { return "en"; }
+  });
+  const [messages, setMessages] = useState(() => {
+    try {
+      const savedLang = localStorage.getItem("tabi_lang") || "en";
+      const saved = localStorage.getItem("tabi_messages_" + savedLang);
+      return saved ? JSON.parse(saved) : [{ role: "assistant", content: WELCOME_MESSAGES[savedLang] }];
+    } catch { return [{ role: "assistant", content: WELCOME_MESSAGES["en"] }]; }
+  });
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [placesResults, setPlacesResults] = useState({});
@@ -196,9 +204,28 @@ export default function App() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  useEffect(() => {
+    try {
+      const msgsToSave = messages.map(m => m.image ? { ...m, image: null } : m);
+      localStorage.setItem("tabi_messages_" + lang, JSON.stringify(msgsToSave));
+    } catch (e) { console.error("Failed to save:", e); }
+  }, [messages, lang]);
+
   const switchLang = (newLang) => {
     setLang(newLang);
-    setMessages([{ role: "assistant", content: WELCOME_MESSAGES[newLang] }]);
+    try { localStorage.setItem("tabi_lang", newLang); } catch {}
+    try {
+      const saved = localStorage.getItem("tabi_messages_" + newLang);
+      setMessages(saved ? JSON.parse(saved) : [{ role: "assistant", content: WELCOME_MESSAGES[newLang] }]);
+    } catch {
+      setMessages([{ role: "assistant", content: WELCOME_MESSAGES[newLang] }]);
+    }
+    setPlacesResults({});
+  };
+
+  const clearHistory = () => {
+    try { localStorage.removeItem("tabi_messages_" + lang); } catch {}
+    setMessages([{ role: "assistant", content: WELCOME_MESSAGES[lang] }]);
     setPlacesResults({});
   };
 
@@ -327,6 +354,7 @@ export default function App() {
                 transition: "all 0.2s", boxShadow: lang === code ? "0 0 10px rgba(232,54,61,0.3)" : "none",
               }}>{flag}</button>
             ))}
+            <button onClick={clearHistory} style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", marginLeft: 2 }} title="Clear history">🗑️</button>
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 8px #4ade80", marginLeft: 4 }} />
           </div>
         </div>
