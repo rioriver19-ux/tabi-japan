@@ -17,15 +17,13 @@ When recommending places, ALWAYS prioritize:
 5. The "locals only" angle — standing bars, shotengai, kissaten, sento
 
 IMPORTANT — REAL-TIME PLACE SEARCH:
-When a user asks for restaurant/cafe/bar recommendations or asks "where to eat/drink/go", you MUST include the special tag [SEARCH: your search query] somewhere in your response. This will trigger a real-time Google Places search.
+When a user asks for restaurant/cafe/bar recommendations or asks "where to eat/drink/go", you MUST include the special tag [SEARCH: your search query] somewhere in your response.
 
 Examples:
 - User asks "best ramen in Shinjuku" → include [SEARCH: best ramen Shinjuku Tokyo]
 - User asks "local bar in Shimokitazawa" → include [SEARCH: local izakaya bar Shimokitazawa Tokyo]
 - User asks "coffee shop in Kyoto" → include [SEARCH: specialty coffee Kyoto]
 - User asks "hidden gems in Tokyo" → include [SEARCH: local hidden gem restaurant Tokyo]
-
-Format your response naturally, then add the search tag. The search results will be shown as cards below your message.
 
 PHOTO ANALYSIS:
 - If it's FOOD: identify boldly (e.g. "🍜 This is Tonkotsu Ramen!"), explain, price in yen, how to order
@@ -93,9 +91,7 @@ export default function App() {
     return match ? match[1].trim() : null;
   };
 
-  const cleanText = (text) => {
-    return text.replace(/\[SEARCH:\s*.+?\]/g, "").trim();
-  };
+  const cleanText = (text) => text.replace(/\[SEARCH:\s*.+?\]/g, "").trim();
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
@@ -112,7 +108,6 @@ export default function App() {
     const userMsg = { role: "user", content: "What is this?", image: preview };
     setMessages(prev => [...prev, userMsg]);
     setLoading(true);
-
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -121,26 +116,23 @@ export default function App() {
           model: "claude-haiku-4-5-20251001",
           max_tokens: 1000,
           system: SYSTEM_PROMPT,
-          messages: [{
-            role: "user",
-            content: [
-              { type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } },
-              { type: "text", text: "What is this? Please identify this and give me helpful travel tips about it as a visitor to Japan." },
-            ],
-          }],
+          messages: [{ role: "user", content: [
+            { type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } },
+            { type: "text", text: "What is this? Please identify this and give me helpful travel tips about it as a visitor to Japan." },
+          ]}],
         }),
       });
       const data = await response.json();
       const reply = data.content?.map((b) => b.text || "").join("") || "Sorry, I couldn't get a response.";
       setMessages(prev => {
-        const newMessages = [...prev, { role: "assistant", content: reply }];
-        const idx = newMessages.length - 1;
+        const newMsgs = [...prev, { role: "assistant", content: reply }];
+        const idx = newMsgs.length - 1;
         const searchQuery = extractSearchQuery(reply);
         if (searchQuery) searchPlaces(searchQuery, idx);
-        return newMessages;
+        return newMsgs;
       });
     } catch (err) {
-      setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen（すみません）— something went wrong!" }]);
+      setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]);
     } finally {
       setLoading(false);
     }
@@ -150,46 +142,30 @@ export default function App() {
     const userText = text || input.trim();
     if (!userText || loading) return;
     setInput("");
-
     const userMsg = { role: "user", content: userText };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setLoading(true);
-
     try {
       const apiMessages = newMessages
         .filter((m) => m !== WelcomeMessage)
         .map((m) => {
-          if (m.image) {
-            return {
-              role: m.role,
-              content: [
-                { type: "image", source: { type: "base64", media_type: "image/jpeg", data: m.image.split(",")[1] } },
-                { type: "text", text: m.content },
-              ],
-            };
-          }
+          if (m.image) return { role: m.role, content: [
+            { type: "image", source: { type: "base64", media_type: "image/jpeg", data: m.image.split(",")[1] } },
+            { type: "text", text: m.content },
+          ]};
           return { role: m.role, content: m.content };
         });
-
       if (apiMessages.length === 0 || apiMessages[0].role !== "user") {
         apiMessages.unshift({ role: "user", content: userText });
       }
-
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 1000,
-          system: SYSTEM_PROMPT,
-          messages: apiMessages,
-        }),
+        body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 1000, system: SYSTEM_PROMPT, messages: apiMessages }),
       });
-
       const data = await response.json();
       const reply = data.content?.map((b) => b.text || "").join("") || "Sorry, I couldn't get a response.";
-      
       setMessages(prev => {
         const newMsgs = [...prev, { role: "assistant", content: reply }];
         const idx = newMsgs.length - 1;
@@ -198,7 +174,7 @@ export default function App() {
         return newMsgs;
       });
     } catch (err) {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Sumimasen（すみません）— something went wrong!" }]);
+      setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]);
     } finally {
       setLoading(false);
       inputRef.current?.focus();
@@ -206,10 +182,7 @@ export default function App() {
   };
 
   const handleKey = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
 
   const getPriceLevel = (level) => {
@@ -219,12 +192,9 @@ export default function App() {
 
   const renderContent = (text) => {
     const cleaned = cleanText(text);
-    const lines = cleaned.split("\n");
-    return lines.map((line, i) => {
+    return cleaned.split("\n").map((line, i) => {
       line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-      if (line.startsWith("- ") || line.startsWith("• ")) {
-        return <li key={i} dangerouslySetInnerHTML={{ __html: line.slice(2) }} style={{ marginBottom: 4 }} />;
-      }
+      if (line.startsWith("- ") || line.startsWith("• ")) return <li key={i} dangerouslySetInnerHTML={{ __html: line.slice(2) }} style={{ marginBottom: 4 }} />;
       if (line === "") return <br key={i} />;
       return <p key={i} style={{ margin: "2px 0" }} dangerouslySetInnerHTML={{ __html: line }} />;
     });
@@ -253,9 +223,7 @@ export default function App() {
           {messages.map((msg, i) => (
             <div key={i}>
               <div style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", gap: 10, alignItems: "flex-end" }}>
-                {msg.role === "assistant" && (
-                  <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>
-                )}
+                {msg.role === "assistant" && <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>}
                 <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
                   {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
                   <div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}>
@@ -266,14 +234,15 @@ export default function App() {
 
               {/* Places Cards */}
               {placesResults[i] && (
-                <div style={{ marginTop: 12, marginLeft: 40, display: "flex", flexDirection: "column", gap: 8 }}>
-                  <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em", marginBottom: 4 }}>📍 NEARBY PLACES · LIVE DATA</div>
+                <div style={{ marginTop: 12, marginLeft: 40, display: "flex", flexDirection: "column", gap: 10 }}>
+                  <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em" }}>📍 NEARBY PLACES · LIVE DATA</div>
                   {placesResults[i].map((place, j) => (
-                    <a key={j} href={place.googleMapsUri} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-                      <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", cursor: "pointer", transition: "all 0.2s" }}
-                        onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
-                        onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
-                      >
+                    <div key={j} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden" }}>
+                      {/* Photo */}
+                      {place.photoUrl && (
+                        <img src={place.photoUrl} alt={place.displayName?.text} style={{ width: "100%", height: 140, objectFit: "cover" }} onError={e => e.target.style.display = "none"} />
+                      )}
+                      <div style={{ padding: "12px 14px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                           <div style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}>{place.displayName?.text}</div>
                           <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
@@ -287,8 +256,21 @@ export default function App() {
                             {place.currentOpeningHours.openNow ? "● Open now" : "● Closed now"}
                           </div>
                         )}
+                        {/* Links */}
+                        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                          {place.googleMapsUri && (
+                            <a href={place.googleMapsUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(232,54,61,0.2)", border: "1px solid rgba(232,54,61,0.4)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none", display: "block" }}>
+                              📍 Google Maps
+                            </a>
+                          )}
+                          {place.websiteUri && (
+                            <a href={place.websiteUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none", display: "block" }}>
+                              🌐 Official Site
+                            </a>
+                          )}
+                        </div>
                       </div>
-                    </a>
+                    </div>
                   ))}
                 </div>
               )}
@@ -321,7 +303,7 @@ export default function App() {
         {/* Input */}
         <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderTop: "1px solid rgba(255,255,255,0.06)", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end" }}>
           <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
-          <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, transition: "all 0.2s" }}>📷</button>
+          <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📷</button>
           <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder="Ask me anything about Japan... 🗾" rows={1} style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", color: "#fff", fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
             onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
           <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : "0 4px 16px rgba(232,54,61,0.4)", color: "#fff" }}>↑</button>
