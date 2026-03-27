@@ -362,6 +362,14 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
 
   const isItinerary = (text) => text.includes("Day 1") || text.includes("## Day") || text.includes("**Day");
 
+  const addMapLinks = (text) => {
+    // Known Japan place patterns - capitalized words followed by common place indicators
+    return text.replace(/([A-Z][a-zA-Z\s　-鿿（）()]+(?:Market|Temple|Shrine|Station|Street|Park|Museum|District|Garden|Tower|Castle|Line|Area|Alley|Bar|Cafe|Ramen|Restaurant|Inn|Hotel|Mall|Store|Shop))/g, (match) => {
+      const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(match + " Japan")}`;
+      return `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" style="color:#ff8080;text-decoration:underline;text-decoration-style:dotted;">${match}</a>`;
+    });
+  };
+
   const renderContent = (text) => cleanText(text).split("\n").map((line, i) => {
     // H2 見出し
     if (line.startsWith("## ")) {
@@ -373,6 +381,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
     }
     line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
     line = line.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    line = addMapLinks(line);
     if (line.startsWith("- ") || line.startsWith("• ")) return <li key={i} dangerouslySetInnerHTML={{ __html: line.slice(2) }} style={{ marginBottom: 4 }} />;
     if (line === "") return <br key={i} />;
     return <p key={i} style={{ margin: "2px 0" }} dangerouslySetInnerHTML={{ __html: line }} />;
