@@ -348,8 +348,31 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
   const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
   const getPriceLevel = (l) => ({ PRICE_LEVEL_INEXPENSIVE: "¥", PRICE_LEVEL_MODERATE: "¥¥", PRICE_LEVEL_EXPENSIVE: "¥¥¥", PRICE_LEVEL_VERY_EXPENSIVE: "¥¥¥¥" }[l] || "");
 
+  const shareItinerary = async (text) => {
+    const cleaned = cleanText(text);
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "TABI 旅 - My Japan Itinerary", text: cleaned });
+      } catch (e) { console.log("Share cancelled"); }
+    } else {
+      navigator.clipboard.writeText(cleaned);
+      alert("Itinerary copied to clipboard!");
+    }
+  };
+
+  const isItinerary = (text) => text.includes("Day 1") || text.includes("## Day") || text.includes("**Day");
+
   const renderContent = (text) => cleanText(text).split("\n").map((line, i) => {
+    // H2 見出し
+    if (line.startsWith("## ")) {
+      return <div key={i} style={{ fontSize: 16, fontWeight: "bold", color: "#e8363d", marginTop: 16, marginBottom: 6, borderBottom: "1px solid rgba(232,54,61,0.3)", paddingBottom: 4 }}>{line.slice(3)}</div>;
+    }
+    // H3 見出し
+    if (line.startsWith("### ")) {
+      return <div key={i} style={{ fontSize: 14, fontWeight: "bold", color: "rgba(255,255,255,0.9)", marginTop: 12, marginBottom: 4 }}>{line.slice(4)}</div>;
+    }
     line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    line = line.replace(/\*(.*?)\*/g, "<em>$1</em>");
     if (line.startsWith("- ") || line.startsWith("• ")) return <li key={i} dangerouslySetInnerHTML={{ __html: line.slice(2) }} style={{ marginBottom: 4 }} />;
     if (line === "") return <br key={i} />;
     return <p key={i} style={{ margin: "2px 0" }} dangerouslySetInnerHTML={{ __html: line }} />;
@@ -395,6 +418,11 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
                   <div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}>
                     {renderContent(msg.content)}
                   </div>
+                  {msg.role === "assistant" && isItinerary(msg.content) && (
+                    <button onClick={() => shareItinerary(msg.content)} style={{ alignSelf: "flex-start", marginTop: 6, background: "rgba(232,54,61,0.15)", border: "1px solid rgba(232,54,61,0.4)", borderRadius: 20, padding: "6px 16px", color: "#fff", fontSize: 12.5, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+                      📤 Share Itinerary
+                    </button>
+                  )}
                 </div>
               </div>
               {placesResults[i] && (
