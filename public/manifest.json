@@ -1,0 +1,22 @@
+{
+  "name": "TABI 旅 - Japan Concierge",
+  "short_name": "TABI",
+  "description": "Your local Japan travel concierge",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0c1a",
+  "theme_color": "#e8363d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
