@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     headers: {
       'Content-Type': 'application/json',
       'X-Goog-Api-Key': apiKey,
-      'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.rating,places.currentOpeningHours,places.priceLevel,places.googleMapsUri',
+      'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.rating,places.currentOpeningHours,places.priceLevel,places.googleMapsUri,places.websiteUri,places.photos',
     },
     body: JSON.stringify({
       textQuery: query + ' Japan',
@@ -22,5 +22,16 @@ export default async function handler(req, res) {
   });
 
   const data = await response.json();
+
+  // Add photo URLs
+  if (data.places) {
+    data.places = data.places.map(place => {
+      if (place.photos && place.photos.length > 0) {
+        place.photoUrl = `https://places.googleapis.com/v1/${place.photos[0].name}/media?maxHeightPx=200&maxWidthPx=400&key=${apiKey}`;
+      }
+      return place;
+    });
+  }
+
   res.status(200).json(data);
 }
