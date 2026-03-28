@@ -205,6 +205,7 @@ export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [placesResults, setPlacesResults] = useState({});
+  const [imageResults, setImageResults] = useState({});
   const [showPlanner, setShowPlanner] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(() => {
     try { return !localStorage.getItem("tabi_install_dismissed"); } catch { return true; }
@@ -286,7 +287,21 @@ export default function App() {
       console.error("Places search failed:", err);
     }
   };
-
+const searchImages = async (query, messageIndex) => {
+    try {
+      const response = await fetch("/api/images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      const data = await response.json();
+      if (data.images && data.images.length > 0) {
+        setImageResults(prev => ({ ...prev, [messageIndex]: data.images }));
+      }
+    } catch (err) {
+      console.error("Image search failed:", err);
+    }
+  };
   const extractSearchQuery = (text) => {
     const match = text.match(/\[SEARCH:\s*(.+?)\]/);
     return match ? match[1].trim() : null;
@@ -325,6 +340,7 @@ export default function App() {
         const newMsgs = [...prev, { role: "assistant", content: reply }];
         const q = extractSearchQuery(reply);
         if (q) searchPlaces(q, newMsgs.length - 1);
+        if (q) searchImages(q, newMsgs.length - 1);
         return newMsgs;
       });
     } catch { setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]); }
@@ -356,6 +372,7 @@ export default function App() {
         const newMsgs = [...prev, { role: "assistant", content: reply }];
         const q = extractSearchQuery(reply);
         if (q) searchPlaces(q, newMsgs.length - 1);
+        if (q) searchImages(q, newMsgs.length - 1);
         return newMsgs;
       });
     } catch { setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]); }
@@ -504,6 +521,26 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
                   )}
                 </div>
               </div>
+{imageResults[i] && (
+  <div style={{ marginTop: 10, marginLeft: 40 }}>
+    <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em", marginBottom: 8 }}>
+      📸 IMAGES
+    </div>
+    <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8 }}>
+      {imageResults[i].map((img, j) => (
+        <a key={j} href={img.contextLink} target="_blank" rel="noopener noreferrer"
+          style={{ flexShrink: 0, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.12)" }}>
+          <img
+            src={img.url}
+            alt={img.title}
+            style={{ width: 140, height: 100, objectFit: "cover", display: "block" }}
+            onError={e => e.target.parentElement.style.display = "none"}
+          />
+        </a>
+      ))}
+    </div>
+  </div>
+)}
               {placesResults[i] && (
                 <div style={{ marginTop: 12, marginLeft: 40, display: "flex", flexDirection: "column", gap: 10 }}>
                   <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em" }}>📍 NEARBY PLACES · LIVE DATA</div>
