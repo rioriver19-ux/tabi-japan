@@ -522,11 +522,11 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
                 </div>
               </div>
 {imageResults[i] && (
-  <div style={{ marginTop: 10, marginLeft: 40 }}>
+<div style={{ marginTop: 10, marginLeft: 40, overflow: "hidden" }}>
     <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em", marginBottom: 8 }}>
       📸 IMAGES
     </div>
-    <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, flexWrap: "nowrap" }}>
+<div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, flexWrap: "nowrap", width: "100%", minWidth: 0 }}>
       {imageResults[i].map((img, j) => (
         <a key={j} href={img.contextLink} target="_blank" rel="noopener noreferrer"
           style={{ flexShrink: 0, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.12)" }}>
