@@ -526,7 +526,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
     <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em", marginBottom: 8 }}>
       📸 IMAGES
     </div>
-    <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8 }}>
+    <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, flexWrap: "nowrap" }}>
       {imageResults[i].map((img, j) => (
         <a key={j} href={img.contextLink} target="_blank" rel="noopener noreferrer"
           style={{ flexShrink: 0, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.12)" }}>
