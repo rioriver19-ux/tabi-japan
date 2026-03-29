@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query + ' Japan')}&searchType=image&num=6&imgSize=large&safe=active`
+      `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query + ' Japan')}&searchType=image&num=6&imgSize=large&safe=active&siteSearch=tripadvisor.com&siteSearchFilter=e`
     );
     const data = await response.json();
     const images = (data.items || []).map(item => ({
