@@ -339,6 +339,7 @@ const searchImages = async (query, messageIndex) => {
         const q = extractSearchQuery(reply);
         if (q) searchPlaces(q, newMsgs.length - 1);
         if (q) searchImages(q, newMsgs.length - 1);
+        else searchImages(userText, newMsgs.length - 1);
         return newMsgs;
       });
     } catch { setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]); }
@@ -371,6 +372,7 @@ const searchImages = async (query, messageIndex) => {
         const q = extractSearchQuery(reply);
         if (q) searchPlaces(q, newMsgs.length - 1);
         if (q) searchImages(q, newMsgs.length - 1);
+        else searchImages(userText, newMsgs.length - 1);
         return newMsgs;
       });
     } catch { setMessages(prev => [...prev, { role: "assistant", content: "Sumimasen— something went wrong!" }]); }
