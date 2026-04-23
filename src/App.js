@@ -222,7 +222,9 @@ export default function App() {
   const [placesResults, setPlacesResults] = useState({});
   const [imageResults, setImageResults] = useState({});
   const [showPlanner, setShowPlanner] = useState(false);
-  const [showInstallBanner, setShowInstallBanner] = useState(() => {
+const [showSuggestions, setShowSuggestions] = useState(true);
+const [showWelcome, setShowWelcome] = useState(true);
+const [showInstallBanner, setShowInstallBanner] = useState(() => {
     try { return !localStorage.getItem("tabi_install_dismissed"); } catch { return true; }
   });
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -527,8 +529,15 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
                 )}
                 <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
                   {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
-                  <div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}>
-                    {renderContent(msg.content)}
+<div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", position: "relative",                   
+{msg.role === "assistant" && i === 0 && showWelcome && (
+  <button onClick={() => setShowWelcome(false)} style={{
+    position: "absolute", top: 6, right: 8,
+    background: "none", border: "none", color: "rgba(255,255,255,0.4)",
+    fontSize: 18, cursor: "pointer", lineHeight: 1
+  }}>×</button>
+)}
+  {renderContent(msg.content)} 
                   </div>
                   {msg.role === "assistant" && isItinerary(msg.content) && (
                     <button onClick={() => shareItinerary(msg.content)} style={{ alignSelf: "flex-start", marginTop: 6, background: "rgba(232,54,61,0.15)", border: "1px solid rgba(232,54,61,0.4)", borderRadius: 20, padding: "6px 16px", color: "#fff", fontSize: 12.5, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
@@ -595,14 +604,18 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
           <div ref={bottomRef} />
         </div>
 
-        {messages.length <= 1 && (
+       {messages.length <= 1 && showSuggestions && (
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "none", padding: "12px 16px", display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {SUGGESTIONS[lang].map((s, i) => (
-              <button key={i} onClick={() => sendMessage(s)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 14px", color: "rgba(255,255,255,0.75)", fontSize: 12.5, cursor: "pointer", transition: "all 0.2s" }}
-              onMouseEnter={e => { e.target.style.background = "rgba(232,54,61,0.2)"; e.target.style.borderColor = "rgba(232,54,61,0.4)"; }}
-              onMouseLeave={e => { e.target.style.background = "rgba(255,255,255,0.05)"; e.target.style.borderColor = "rgba(255,255,255,0.12)"; }}
-              >{s}</button>
-            ))}
+  <button onClick={() => setShowSuggestions(false)} style={{
+    marginLeft: "auto", background: "none", border: "none",
+    color: "rgba(255,255,255,0.4)", fontSize: 18, cursor: "pointer", padding: "0 4px"
+  }}>×</button>
+{SUGGESTIONS[lang].map((s, i) => (
+  <button key={i} onClick={() => sendMessage(s)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 14px", color: "rgba(255,255,255,0.75)", fontSize: 12.5, cursor: "pointer", transition: "all 0.2s" }}
+  onMouseEnter={e => { e.target.style.background = "rgba(232,54,61,0.2)"; e.target.style.borderColor = "rgba(232,54,61,0.4)"; }}
+  onMouseLeave={e => { e.target.style.background = "rgba(255,255,255,0.05)"; e.target.style.borderColor = "rgba(255,255,255,0.12)"; }}
+  >{s}</button>
+))}
           </div>
         )}
 
