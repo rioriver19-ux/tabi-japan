@@ -529,7 +529,7 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
                 )}
                 <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
                   {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
-<div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", position: "relative",                   
+<div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", position: "relative", }}>                 
 {msg.role === "assistant" && i === 0 && showWelcome && (
   <button onClick={() => setShowWelcome(false)} style={{
     position: "absolute", top: 6, right: 8,
