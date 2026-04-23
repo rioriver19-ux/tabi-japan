@@ -527,7 +527,7 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
                 )}
                 <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
                   {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
-<div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)" }}>                 
+<div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}>        
   {renderContent(msg.content)} 
                   </div>
                   {msg.role === "assistant" && isItinerary(msg.content) && (
