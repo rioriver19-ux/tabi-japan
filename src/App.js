@@ -488,7 +488,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
     return <p key={i} style={{ margin: "2px 0" }} dangerouslySetInnerHTML={{ __html: line }} />;
   });
 
-  const placeholder = { en: "Ask me anything about Japan... 🗾", zh: "问我任何关于日本的问题... 🗾", ko: "일본에 대해 무엇이든 물어보세요... 🗾", ja: "日本について何でも聞いてください... 🗾" };
+  const placeholder = { en: "Ask me anything about Japan... 🗾", zh: "可随任何关于日本的问题...", ko: "일본에 대해 무엇이든 물어보세요...", ja: "日本について何でも聞いてください...", it: "Chiedimi qualsiasi cosa sul Giappone... 🗾" };
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Georgia', 'Times New Roman', serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px" }}>
