@@ -195,6 +195,15 @@ What can I help you with today?`,
 👶 **お子様連れですか？** ベビーカーOKのルートや子連れスポットもお任せ！
 
 今日は何をお手伝いしましょうか？`,
+  it: `Benvenuto in Giappone! 🗾
+
+Sono **TABI**, il tuo concierge personale per il Giappone — specializzato nel Giappone che amano i locali.
+
+📸 **Scatta & Identifica!** Fotografa qualsiasi cibo, insegna o menu.
+📍 **Ricerca in tempo reale** — Chiedimi dove mangiare o bere e troverò posti aperti adesso!
+👶 **Viaggi con bambini?** Chiedimi percorsi accessibili e posti per famiglie!
+
+Come posso aiutarti oggi?`,
 };
 
 const SUGGESTIONS = {
@@ -202,9 +211,10 @@ const SUGGESTIONS = {
   zh: ["🍜 东京最好的拉面？", "🏘️ 东京隐藏的宝藏？", "🍻 本地人去哪喝酒？", "⛩️ 京都冷门景点", "👶 适合婴儿车的景点？", "☕ 最好的喫茶店？"],
   ko: ["🍜 도쿄 최고의 라멘？", "🏘️ 도쿄 숨은 명소？", "🍻 현지인이 가는 술집？", "⛩️ 교토 색다른 명소", "👶 유모차 친화적 명소？", "☕ 킷사텐 카페 추천？"],
   ja: ["🍜 東京のおすすめラーメン？", "🏘️ 東京の穴場スポット？", "🍻 地元民が行く居酒屋？", "⛩️ 京都の隠れた名所", "👶 ベビーカーOKのスポット？", "☕ おすすめ喫茶店は？"],
+  it: ["🍕 Miglior ramen a Tokyo?", "💎 Gemme nascoste a Tokyo?", "🍺 Dove bevono i locali?", "⛩️ Posti nascosti a Kyoto?", "👶 Posti accessibili?", "☕ Miglior kissaten?"],
 };
 
-const LANG_FLAGS = { en: "🇺🇸", zh: "🇨🇳", ko: "🇰🇷", ja: "🇯🇵" };
+const LANG_FLAGS = { en: "🇺🇸", zh: "🇨🇳", ko: "🇰🇷", ja: "🇯🇵", it: "🇮🇹" };
 
 // カラーパレット
 const C = {
