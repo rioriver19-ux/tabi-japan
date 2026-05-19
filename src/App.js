@@ -630,7 +630,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
                 onMouseLeave={e => { e.target.style.background = C.bg; e.target.style.borderColor = C.headerBorder; e.target.style.color = C.textMid; }}
               >{s}</button>
             ))}
-          </div></div>
+          </div>
         )}
 
         <div style={{ background: C.inputBg, border: `1px solid ${C.inputBorder}`, borderTop: "none", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end", boxShadow: "0 -2px 12px rgba(196,149,106,0.06)" }}>
