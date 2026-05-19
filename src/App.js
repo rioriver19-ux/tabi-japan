@@ -622,12 +622,12 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
         </div>
 
         {messages.length <= 1 && showSuggestions && (
-          <div style={{ background: C.header, border: `1px solid ${C.headerBorder}`, borderTop: "none", borderBottom: "none", padding: "12px 16px", display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
-            <button onClick={() => setShowSuggestions(false)} style={{ position: "absolute", top: 6, right: 8, background: "none", border: "none", color: C.textSub, fontSize: 14, cursor: "pointer", padding: "0 4px", opacity: 0.5 }}>×</button>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+         <div style={{ background: C.header, border: `1px solid ${C.headerBorder}`, borderTop: "none", borderBottom: "none", padding: "12px 16px", display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+            <button onClick={() => setShowSuggestions(false)} style={{ marginLeft: "auto", background: "none", border: "none", color: C.textSub, fontSize: 18, cursor: "pointer", padding: "0 4px" }}>×</button>
+            {SUGGESTIONS[lang].map((s, i) => (
               <button key={i} onClick={() => sendMessage(s)} style={{ background: C.bg, border: `1px solid ${C.headerBorder}`, borderRadius: 20, padding: "6px 14px", color: C.textMid, fontSize: 12.5, cursor: "pointer", transition: "all 0.2s" }}
-                onMouseEnter={e => { e.target.style.background = C.mainBg; e.target.style.borderColor = C.main; e.target.style.color = C.main; }}
-                onMouseLeave={e => { e.target.style.background = C.bg; e.target.style.borderColor = C.headerBorder; e.target.style.color = C.textMid; }}
+              onMouseEnter={e => { e.target.style.background = C.mainBg; e.target.style.borderColor = C.main; e.target.style.color = C.main; }}
+              onMouseLeave={e => { e.target.style.background = C.bg; e.target.style.borderColor = C.headerBorder; e.target.style.color = C.textMid; }}
               >{s}</button>
             ))}
           </div>
