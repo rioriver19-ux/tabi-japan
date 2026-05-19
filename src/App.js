@@ -206,6 +206,36 @@ const SUGGESTIONS = {
 
 const LANG_FLAGS = { en: "🇺🇸", zh: "🇨🇳", ko: "🇰🇷", ja: "🇯🇵" };
 
+// カラーパレット
+const C = {
+  bg: "#F5F0E8",
+  bgPattern: "%23C4956A",
+  header: "#FFFFFF",
+  headerBorder: "#E8DDD0",
+  main: "#C4956A",
+  mainDark: "#A67C52",
+  mainGlow: "rgba(196,149,106,0.3)",
+  mainBg: "rgba(196,149,106,0.15)",
+  mainBorder: "rgba(196,149,106,0.4)",
+  accent: "#7C9A6E",
+  text: "#2D2520",
+  textSub: "#9A8878",
+  textMid: "#5A4A40",
+  bubbleUser: "linear-gradient(135deg, #C4956A, #A67C52)",
+  bubbleAssistant: "#FFFFFF",
+  bubbleBorder: "#E8DDD0",
+  messageBg: "#F9F5EF",
+  inputBg: "#FFFFFF",
+  inputBorder: "#E8DDD0",
+  scrollbar: "rgba(196,149,106,0.2)",
+  online: "#7C9A6E",
+  placeCard: "#FFFFFF",
+  placeCardBorder: "#E8DDD0",
+  plannerBg: "#FFFFFF",
+  plannerBorder: "#E8DDD0",
+  installBg: "linear-gradient(135deg, #F5F0E8, #EDE5D8)",
+};
+
 export default function App() {
   const [lang, setLang] = useState(() => {
     try { return localStorage.getItem("tabi_lang") || "en"; } catch { return "en"; }
@@ -223,8 +253,8 @@ export default function App() {
   const [imageResults, setImageResults] = useState({});
   const [showPlanner, setShowPlanner] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
-const [showSuggestions, setShowSuggestions] = useState(true);
-const [showInstallBanner, setShowInstallBanner] = useState(() => {
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showInstallBanner, setShowInstallBanner] = useState(() => {
     try { return !localStorage.getItem("tabi_install_dismissed"); } catch { return true; }
   });
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -249,10 +279,7 @@ const [showInstallBanner, setShowInstallBanner] = useState(() => {
   }, [messages, lang]);
 
   useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
+    const handler = (e) => { e.preventDefault(); setDeferredPrompt(e); };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
@@ -292,33 +319,29 @@ const [showInstallBanner, setShowInstallBanner] = useState(() => {
   const searchPlaces = async (query, messageIndex) => {
     try {
       const response = await fetch("/api/places", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
       });
       const data = await response.json();
       if (data.places && data.places.length > 0) {
         setPlacesResults(prev => ({ ...prev, [messageIndex]: data.places }));
       }
-    } catch (err) {
-      console.error("Places search failed:", err);
-    }
+    } catch (err) { console.error("Places search failed:", err); }
   };
-const searchImages = async (query, messageIndex) => {
+
+  const searchImages = async (query, messageIndex) => {
     try {
       const response = await fetch("/api/images", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
       });
       const data = await response.json();
       if (data.images && data.images.length > 0) {
         setImageResults(prev => ({ ...prev, [messageIndex]: data.images }));
       }
-    } catch (err) {
-      console.error("Image search failed:", err);
-    }
+    } catch (err) { console.error("Image search failed:", err); }
   };
+
   const extractSearchQuery = (text) => {
     const match = text.match(/\[SEARCH:\s*(.+?)\]/);
     return match ? match[1].trim() : null;
@@ -330,9 +353,7 @@ const searchImages = async (query, messageIndex) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => {
-      autoSendImage(ev.target.result.split(",")[1], ev.target.result);
-    };
+    reader.onload = (ev) => { autoSendImage(ev.target.result.split(",")[1], ev.target.result); };
     reader.readAsDataURL(file);
   };
 
@@ -341,8 +362,7 @@ const searchImages = async (query, messageIndex) => {
     setLoading(true);
     try {
       const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-haiku-4-5-20251001", max_tokens: 1000, system: SYSTEM_PROMPTS[lang],
           messages: [{ role: "user", content: [
@@ -417,18 +437,17 @@ Format as:
 💴 Estimated cost: ¥XXXX
 
 Include specific neighborhood names, timing tips, and local insider advice. Add [SEARCH: best restaurants in ${area}] at the end.`;
-
     sendMessage(prompt);
   };
 
-const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent?.isComposing) { e.preventDefault(); sendMessage(); } };  const getPriceLevel = (l) => ({ PRICE_LEVEL_INEXPENSIVE: "¥", PRICE_LEVEL_MODERATE: "¥¥", PRICE_LEVEL_EXPENSIVE: "¥¥¥", PRICE_LEVEL_VERY_EXPENSIVE: "¥¥¥¥" }[l] || "");
+  const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent?.isComposing) { e.preventDefault(); sendMessage(); } };
+  const getPriceLevel = (l) => ({ PRICE_LEVEL_INEXPENSIVE: "¥", PRICE_LEVEL_MODERATE: "¥¥", PRICE_LEVEL_EXPENSIVE: "¥¥¥", PRICE_LEVEL_VERY_EXPENSIVE: "¥¥¥¥" }[l] || "");
 
   const shareItinerary = async (text) => {
     const cleaned = cleanText(text);
     if (navigator.share) {
-      try {
-        await navigator.share({ title: "TABI 旅 - My Japan Itinerary", text: cleaned });
-      } catch (e) { console.log("Share cancelled"); }
+      try { await navigator.share({ title: "TABI 旅 - My Japan Itinerary", text: cleaned }); }
+      catch (e) { console.log("Share cancelled"); }
     } else {
       navigator.clipboard.writeText(cleaned);
       alert("Itinerary copied to clipboard!");
@@ -438,21 +457,18 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
   const isItinerary = (text) => text.includes("Day 1") || text.includes("## Day") || text.includes("**Day");
 
   const addMapLinks = (text) => {
-    // Match [Place Name] format that AI uses
     return text.replace(/\[([^\]]+)\]/g, (match, placeName) => {
       const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(placeName + " Japan")}`;
-      return `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" style="color:#ff8080;text-decoration:underline;text-decoration-style:dotted;font-weight:bold;">${placeName} 📍</a>`;
+      return `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" style="color:${C.main};text-decoration:underline;text-decoration-style:dotted;font-weight:bold;">${placeName} 📍</a>`;
     });
   };
 
   const renderContent = (text) => cleanText(text).split("\n").map((line, i) => {
-    // H2 見出し
     if (line.startsWith("## ")) {
-      return <div key={i} style={{ fontSize: 16, fontWeight: "bold", color: "#e8363d", marginTop: 16, marginBottom: 6, borderBottom: "1px solid rgba(232,54,61,0.3)", paddingBottom: 4 }}>{line.slice(3)}</div>;
+      return <div key={i} style={{ fontSize: 16, fontWeight: "bold", color: C.main, marginTop: 16, marginBottom: 6, borderBottom: `1px solid ${C.mainBorder}`, paddingBottom: 4 }}>{line.slice(3)}</div>;
     }
-    // H3 見出し
     if (line.startsWith("### ")) {
-      return <div key={i} style={{ fontSize: 14, fontWeight: "bold", color: "rgba(255,255,255,0.9)", marginTop: 12, marginBottom: 4 }}>{line.slice(4)}</div>;
+      return <div key={i} style={{ fontSize: 14, fontWeight: "bold", color: C.textMid, marginTop: 12, marginBottom: 4 }}>{line.slice(4)}</div>;
     }
     line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
     line = line.replace(/\*(.*?)\*/g, "<em>$1</em>");
@@ -465,13 +481,13 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
   const placeholder = { en: "Ask me anything about Japan... 🗾", zh: "问我任何关于日本的问题... 🗾", ko: "일본에 대해 무엇이든 물어보세요... 🗾", ja: "日本について何でも聞いてください... 🗾" };
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f0c1a 0%, #1a0a2e 40%, #0d1f3c 100%)", fontFamily: "'Georgia', 'Times New Roman', serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-      <div style={{ position: "fixed", inset: 0, opacity: 0.04, backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, pointerEvents: "none" }} />
+    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Georgia', 'Times New Roman', serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+      <div style={{ position: "fixed", inset: 0, opacity: 0.03, backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='${C.bgPattern}' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, pointerEvents: "none" }} />
 
       <div style={{ width: "100%", maxWidth: 680, display: "flex", flexDirection: "column", height: "calc(100vh - 32px)", maxHeight: 800 }}>
         {/* Header */}
-        <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderBottom: "none", borderRadius: "20px 20px 0 0", padding: "16px 20px", display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 20px rgba(232,54,61,0.4)", flexShrink: 0, overflow: "hidden" }}>
+        <div style={{ background: C.header, border: `1px solid ${C.headerBorder}`, borderBottom: "none", borderRadius: "20px 20px 0 0", padding: "16px 20px", display: "flex", alignItems: "center", gap: 12, boxShadow: "0 2px 12px rgba(196,149,106,0.1)" }}>
+          <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 0 20px ${C.mainGlow}`, flexShrink: 0, overflow: "hidden" }}>
             <svg viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="sunG" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -481,37 +497,37 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
               </defs>
               <circle cx="33" cy="16" r="7" fill="url(#sunG)" opacity="0.9"/>
               <polygon points="22,8 6,34 38,34" fill="white" opacity="0.95"/>
-              <polygon points="22,8 14,22 30,22" fill="#e8363d"/>
+              <polygon points="22,8 14,22 30,22" fill={C.main}/>
               <polygon points="22,8 16,18 28,18" fill="white"/>
               <rect x="4" y="33" width="36" height="1.5" fill="white" opacity="0.4" rx="1"/>
             </svg>
           </div>
           <div>
-            <div style={{ color: "#fff", fontSize: 20, fontWeight: "bold", letterSpacing: "0.05em" }}>TABI <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, fontWeight: "normal" }}>旅</span></div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.06em" }}>YOUR JAPAN CONCIERGE</div>
+            <div style={{ color: C.text, fontSize: 20, fontWeight: "bold", letterSpacing: "0.05em" }}>TABI <span style={{ color: C.textSub, fontSize: 14, fontWeight: "normal" }}>旅</span></div>
+            <div style={{ color: C.textSub, fontSize: 11, letterSpacing: "0.06em" }}>YOUR JAPAN CONCIERGE</div>
           </div>
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 5 }}>
             {Object.entries(LANG_FLAGS).map(([code, flag]) => (
               <button key={code} onClick={() => switchLang(code)} style={{
                 width: 34, height: 34, borderRadius: "50%",
-                border: lang === code ? "2px solid rgba(232,54,61,0.8)" : "1px solid rgba(255,255,255,0.15)",
-                background: lang === code ? "rgba(232,54,61,0.2)" : "rgba(255,255,255,0.05)",
+                border: lang === code ? `2px solid ${C.main}` : `1px solid ${C.headerBorder}`,
+                background: lang === code ? C.mainBg : C.bg,
                 cursor: "pointer", fontSize: 17, display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "all 0.2s", boxShadow: lang === code ? "0 0 10px rgba(232,54,61,0.3)" : "none",
+                transition: "all 0.2s", boxShadow: lang === code ? `0 0 10px ${C.mainGlow}` : "none",
               }}>{flag}</button>
             ))}
-            <button onClick={clearHistory} style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", marginLeft: 2 }} title="Clear history">🗑️</button>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 8px #4ade80", marginLeft: 4 }} />
+            <button onClick={clearHistory} style={{ width: 34, height: 34, borderRadius: "50%", background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", marginLeft: 2 }} title="Clear history">🗑️</button>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.online, boxShadow: `0 0 8px ${C.online}`, marginLeft: 4 }} />
           </div>
         </div>
 
         {/* Messages */}
-        <div style={{ flex: 1, overflowY: "auto", background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.08)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "none", padding: "24px 20px", display: "flex", flexDirection: "column", gap: 16, scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.1) transparent" }}>
+        <div style={{ flex: 1, overflowY: "auto", background: C.messageBg, border: `1px solid ${C.headerBorder}`, borderTop: "none", borderBottom: "none", padding: "24px 20px", display: "flex", flexDirection: "column", gap: 16, scrollbarWidth: "thin", scrollbarColor: `${C.scrollbar} transparent` }}>
           {messages.map((msg, i) => (
-        <div key={i} style={{ display: i === 0 && !showWelcome ? "none" : undefined }}>
+            <div key={i} style={{ display: i === 0 && !showWelcome ? "none" : undefined }}>
               <div style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", gap: 10, alignItems: "flex-end" }}>
                 {msg.role === "assistant" && (
-                  <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                  <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                     <svg viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
                       <defs>
                         <linearGradient id="sunS" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -521,69 +537,71 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
                       </defs>
                       <circle cx="22" cy="10" r="5" fill="url(#sunS)" opacity="0.9"/>
                       <polygon points="15,4 3,24 27,24" fill="white" opacity="0.95"/>
-                      <polygon points="15,4 9,14 21,14" fill="#e8363d"/>
+                      <polygon points="15,4 9,14 21,14" fill={C.main}/>
                       <polygon points="15,4 10,12 20,12" fill="white"/>
                       <rect x="2" y="23" width="26" height="1.5" fill="white" opacity="0.4" rx="1"/>
                     </svg>
                   </div>
                 )}
                 <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 8, alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
-                  {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: "2px solid rgba(232,54,61,0.4)" }} />}
-<div style={{ background: msg.role === "user" ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)", border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.1)", borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "12px 16px", color: "#fff", fontSize: 14.5, lineHeight: 1.6, boxShadow: msg.role === "user" ? "0 4px 20px rgba(232,54,61,0.3)" : "none" }}> 
-{i === 0 && (
-  <button onClick={() => setShowWelcome(false)} style={{
-    float: "right", background: "none", border: "none",
-    color: "rgba(255,255,255,0.4)", fontSize: 18, cursor: "pointer"
-  }}>×</button>
-)}
-  {renderContent(msg.content)} 
+                  {msg.image && <img src={msg.image} alt="uploaded" style={{ maxWidth: 200, maxHeight: 200, borderRadius: 12, border: `2px solid ${C.mainBorder}` }} />}
+                  <div style={{
+                    background: msg.role === "user" ? C.bubbleUser : C.bubbleAssistant,
+                    border: msg.role === "user" ? "none" : `1px solid ${C.bubbleBorder}`,
+                    borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+                    padding: "12px 16px",
+                    color: msg.role === "user" ? "#fff" : C.text,
+                    fontSize: 14.5, lineHeight: 1.6,
+                    boxShadow: msg.role === "user" ? `0 4px 20px ${C.mainGlow}` : "0 1px 4px rgba(196,149,106,0.1)"
+                  }}>
+                    {i === 0 && (
+                      <button onClick={() => setShowWelcome(false)} style={{
+                        float: "right", background: "none", border: "none",
+                        color: C.textSub, fontSize: 18, cursor: "pointer"
+                      }}>×</button>
+                    )}
+                    {renderContent(msg.content)}
                   </div>
                   {msg.role === "assistant" && isItinerary(msg.content) && (
-                    <button onClick={() => shareItinerary(msg.content)} style={{ alignSelf: "flex-start", marginTop: 6, background: "rgba(232,54,61,0.15)", border: "1px solid rgba(232,54,61,0.4)", borderRadius: 20, padding: "6px 16px", color: "#fff", fontSize: 12.5, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+                    <button onClick={() => shareItinerary(msg.content)} style={{ alignSelf: "flex-start", marginTop: 6, background: C.mainBg, border: `1px solid ${C.mainBorder}`, borderRadius: 20, padding: "6px 16px", color: C.main, fontSize: 12.5, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
                       📤 Share Itinerary
                     </button>
                   )}
                 </div>
               </div>
-{imageResults[i] && (
-<div style={{ marginTop: 10, marginLeft: 40, overflow: "hidden" }}>
-    <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em", marginBottom: 8 }}>
-      📸 IMAGES
-    </div>
-<div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, flexWrap: "nowrap", width: "100%", minWidth: 0 }}>
-      {imageResults[i].map((img, j) => (
-        <a key={j} href={img.contextLink} target="_blank" rel="noopener noreferrer"
-          style={{ flexShrink: 0, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.12)" }}>
-          <img
-            src={img.url}
-            alt={img.title}
-            style={{ width: 140, height: 100, objectFit: "cover", display: "block" }}
-            onError={e => e.target.parentElement.style.display = "none"}
-          />
-        </a>
-      ))}
-    </div>
-  </div>
-)}
+              {imageResults[i] && (
+                <div style={{ marginTop: 10, marginLeft: 40, overflow: "hidden" }}>
+                  <div style={{ color: C.textSub, fontSize: 11, letterSpacing: "0.08em", marginBottom: 8 }}>📸 IMAGES</div>
+                  <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, flexWrap: "nowrap", width: "100%", minWidth: 0 }}>
+                    {imageResults[i].map((img, j) => (
+                      <a key={j} href={img.contextLink} target="_blank" rel="noopener noreferrer"
+                        style={{ flexShrink: 0, borderRadius: 12, overflow: "hidden", border: `1px solid ${C.bubbleBorder}` }}>
+                        <img src={img.url} alt={img.title} style={{ width: 140, height: 100, objectFit: "cover", display: "block" }}
+                          onError={e => e.target.parentElement.style.display = "none"} />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
               {placesResults[i] && (
                 <div style={{ marginTop: 12, marginLeft: 40, display: "flex", flexDirection: "column", gap: 10 }}>
-                  <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: "0.08em" }}>📍 NEARBY PLACES · LIVE DATA</div>
+                  <div style={{ color: C.textSub, fontSize: 11, letterSpacing: "0.08em" }}>📍 NEARBY PLACES · LIVE DATA</div>
                   {placesResults[i].map((place, j) => (
-                    <div key={j} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden" }}>
+                    <div key={j} style={{ background: C.placeCard, border: `1px solid ${C.placeCardBorder}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 8px rgba(196,149,106,0.08)" }}>
                       {place.photoUrl && <img src={place.photoUrl} alt={place.displayName?.text} style={{ width: "100%", height: 140, objectFit: "cover" }} onError={e => e.target.style.display = "none"} />}
                       <div style={{ padding: "12px 14px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-                          <div style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}>{place.displayName?.text}</div>
+                          <div style={{ color: C.text, fontSize: 14, fontWeight: "bold" }}>{place.displayName?.text}</div>
                           <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                            {place.rating && <span style={{ background: "rgba(232,54,61,0.3)", color: "#fff", fontSize: 12, padding: "2px 8px", borderRadius: 20 }}>⭐ {place.rating}</span>}
-                            {place.priceLevel && <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>{getPriceLevel(place.priceLevel)}</span>}
+                            {place.rating && <span style={{ background: C.mainBg, color: C.main, fontSize: 12, padding: "2px 8px", borderRadius: 20, border: `1px solid ${C.mainBorder}` }}>⭐ {place.rating}</span>}
+                            {place.priceLevel && <span style={{ color: C.textSub, fontSize: 12 }}>{getPriceLevel(place.priceLevel)}</span>}
                           </div>
                         </div>
-                        <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, marginTop: 4 }}>{place.formattedAddress}</div>
-                        {place.currentOpeningHours && <div style={{ marginTop: 6, fontSize: 12, color: place.currentOpeningHours.openNow ? "#4ade80" : "#f87171" }}>{place.currentOpeningHours.openNow ? "● Open now" : "● Closed now"}</div>}
+                        <div style={{ color: C.textSub, fontSize: 12, marginTop: 4 }}>{place.formattedAddress}</div>
+                        {place.currentOpeningHours && <div style={{ marginTop: 6, fontSize: 12, color: place.currentOpeningHours.openNow ? C.accent : "#e07070" }}>{place.currentOpeningHours.openNow ? "● Open now" : "● Closed now"}</div>}
                         <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                          {place.googleMapsUri && <a href={place.googleMapsUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(232,54,61,0.2)", border: "1px solid rgba(232,54,61,0.4)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none" }}>📍 Google Maps</a>}
-                          {place.websiteUri && <a href={place.websiteUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, padding: "7px 12px", color: "#fff", fontSize: 12, textAlign: "center", textDecoration: "none" }}>🌐 Official Site</a>}
+                          {place.googleMapsUri && <a href={place.googleMapsUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: C.mainBg, border: `1px solid ${C.mainBorder}`, borderRadius: 10, padding: "7px 12px", color: C.main, fontSize: 12, textAlign: "center", textDecoration: "none", fontWeight: "bold" }}>📍 Google Maps</a>}
+                          {place.websiteUri && <a href={place.websiteUri} target="_blank" rel="noopener noreferrer" style={{ flex: 1, background: C.bg, border: `1px solid ${C.headerBorder}`, borderRadius: 10, padding: "7px 12px", color: C.textMid, fontSize: 12, textAlign: "center", textDecoration: "none" }}>🌐 Official Site</a>}
                         </div>
                       </div>
                     </div>
@@ -594,94 +612,89 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
           ))}
           {loading && (
             <div style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
-              <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>
-              <div style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "18px 18px 18px 4px", padding: "14px 20px", display: "flex", gap: 6 }}>
-                {[0,1,2].map(j => <div key={j} style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(255,255,255,0.4)", animation: "pulse 1.2s ease-in-out infinite", animationDelay: `${j*0.2}s` }} />)}
+              <div style={{ width: 30, height: 30, borderRadius: "50%", background: `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🗾</div>
+              <div style={{ background: C.bubbleAssistant, border: `1px solid ${C.bubbleBorder}`, borderRadius: "18px 18px 18px 4px", padding: "14px 20px", display: "flex", gap: 6 }}>
+                {[0,1,2].map(j => <div key={j} style={{ width: 7, height: 7, borderRadius: "50%", background: C.main, opacity: 0.4, animation: "pulse 1.2s ease-in-out infinite", animationDelay: `${j*0.2}s` }} />)}
               </div>
             </div>
           )}
           <div ref={bottomRef} />
         </div>
 
-       {messages.length <= 1 && showSuggestions && (
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "none", padding: "12px 16px", display: "flex", flexWrap: "wrap", gap: 8 }}>
-<button onClick={() => setShowSuggestions(false)} style={{
-  marginLeft: "auto", background: "none", border: "none",
-  color: "rgba(255,255,255,0.4)", fontSize: 18, cursor: "pointer", padding: "0 4px"
-}}>×</button>
-{SUGGESTIONS[lang].map((s, i) => (
-  <button key={i} onClick={() => sendMessage(s)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 14px", color: "rgba(255,255,255,0.75)", fontSize: 12.5, cursor: "pointer", transition: "all 0.2s" }}
-  onMouseEnter={e => { e.target.style.background = "rgba(232,54,61,0.2)"; e.target.style.borderColor = "rgba(232,54,61,0.4)"; }}
-  onMouseLeave={e => { e.target.style.background = "rgba(255,255,255,0.05)"; e.target.style.borderColor = "rgba(255,255,255,0.12)"; }}
-  >{s}</button>
-))}
+        {messages.length <= 1 && showSuggestions && (
+          <div style={{ background: C.header, border: `1px solid ${C.headerBorder}`, borderTop: "none", borderBottom: "none", padding: "12px 16px", display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+            <button onClick={() => setShowSuggestions(false)} style={{ marginLeft: "auto", background: "none", border: "none", color: C.textSub, fontSize: 18, cursor: "pointer", padding: "0 4px" }}>×</button>
+            {SUGGESTIONS[lang].map((s, i) => (
+              <button key={i} onClick={() => sendMessage(s)} style={{ background: C.bg, border: `1px solid ${C.headerBorder}`, borderRadius: 20, padding: "6px 14px", color: C.textMid, fontSize: 12.5, cursor: "pointer", transition: "all 0.2s" }}
+                onMouseEnter={e => { e.target.style.background = C.mainBg; e.target.style.borderColor = C.main; e.target.style.color = C.main; }}
+                onMouseLeave={e => { e.target.style.background = C.bg; e.target.style.borderColor = C.headerBorder; e.target.style.color = C.textMid; }}
+              >{s}</button>
+            ))}
           </div>
         )}
 
-        <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)", borderTop: "1px solid rgba(255,255,255,0.06)", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end" }}>
+        <div style={{ background: C.inputBg, border: `1px solid ${C.inputBorder}`, borderTop: "none", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end", boxShadow: "0 -2px 12px rgba(196,149,106,0.06)" }}>
           <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
-          <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📷</button>
-          <button onClick={() => setShowPlanner(true)} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }} title="Plan itinerary">🗓️</button>
+          <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📷</button>
+          <button onClick={() => setShowPlanner(true)} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }} title="Plan itinerary">🗓️</button>
           <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder={placeholder[lang]} rows={1}
-            style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", color: "#fff", fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
+            style={{ flex: 1, background: C.bg, border: `1px solid ${C.inputBorder}`, borderRadius: 14, padding: "12px 16px", color: C.text, fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
             onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
-          <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : "0 4px 16px rgba(232,54,61,0.4)", color: "#fff" }}>↑</button>
+          <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? C.headerBorder : `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : `0 4px 16px ${C.mainGlow}`, color: loading || !input.trim() ? C.textSub : "#fff" }}>↑</button>
         </div>
       </div>
 
       {/* Install Banner */}
       {showInstallBanner && !isInStandaloneMode && (isIOS || isAndroid) && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "linear-gradient(135deg, #1a0a2e, #0d1f3c)", borderTop: "1px solid rgba(255,255,255,0.15)", padding: "16px 20px", zIndex: 200, display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.installBg, borderTop: `1px solid ${C.headerBorder}`, padding: "16px 20px", zIndex: 200, display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ width: 44, height: 44, borderRadius: 10, background: "linear-gradient(135deg, #e8363d, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <svg viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
                   <defs><linearGradient id="sunI" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#f5c842"/><stop offset="100%" stopColor="#e8a020"/></linearGradient></defs>
                   <circle cx="33" cy="16" r="7" fill="url(#sunI)" opacity="0.9"/>
                   <polygon points="22,8 6,34 38,34" fill="white" opacity="0.95"/>
-                  <polygon points="22,8 14,22 30,22" fill="#e8363d"/>
+                  <polygon points="22,8 14,22 30,22" fill={C.main}/>
                   <polygon points="22,8 16,18 28,18" fill="white"/>
                   <rect x="4" y="33" width="36" height="1.5" fill="white" opacity="0.4" rx="1"/>
                 </svg>
               </div>
               <div>
-                <div style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}>ホーム画面に追加</div>
-                <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 2 }}>アプリとして使えます！</div>
+                <div style={{ color: C.text, fontSize: 14, fontWeight: "bold" }}>ホーム画面に追加</div>
+                <div style={{ color: C.textSub, fontSize: 12, marginTop: 2 }}>アプリとして使えます！</div>
               </div>
             </div>
-            <button onClick={dismissInstallBanner} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: 20, cursor: "pointer", padding: 4 }}>×</button>
+            <button onClick={dismissInstallBanner} style={{ background: "none", border: "none", color: C.textSub, fontSize: 20, cursor: "pointer", padding: 4 }}>×</button>
           </div>
-
           {isIOS && (
-            <div style={{ background: "rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 14px" }}>
-              <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, lineHeight: 1.8 }}>
-                <span style={{ color: "#fff", fontWeight: "bold" }}>iPhoneの場合：</span><br/>
+            <div style={{ background: C.bg, borderRadius: 12, padding: "12px 14px", border: `1px solid ${C.headerBorder}` }}>
+              <div style={{ color: C.textMid, fontSize: 12, lineHeight: 1.8 }}>
+                <span style={{ color: C.text, fontWeight: "bold" }}>iPhoneの場合：</span><br/>
                 1. 下の <strong>共有ボタン（□↑）</strong> をタップ<br/>
                 2. <strong>「ホーム画面に追加」</strong> を選択<br/>
                 3. 「追加」をタップ ✓
               </div>
-              <button onClick={dismissInstallBanner} style={{ marginTop: 10, width: "100%", padding: "10px", borderRadius: 10, background: "rgba(232,54,61,0.3)", border: "1px solid rgba(232,54,61,0.5)", color: "#fff", fontSize: 13, cursor: "pointer" }}>
+              <button onClick={dismissInstallBanner} style={{ marginTop: 10, width: "100%", padding: "10px", borderRadius: 10, background: C.mainBg, border: `1px solid ${C.mainBorder}`, color: C.main, fontSize: 13, cursor: "pointer", fontWeight: "bold" }}>
                 わかりました！
               </button>
             </div>
           )}
-
           {isAndroid && (
             <div style={{ display: "flex", gap: 8 }}>
               {deferredPrompt ? (
-                <button onClick={handleInstall} style={{ flex: 1, padding: "12px", borderRadius: 12, background: "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", color: "#fff", fontSize: 14, fontWeight: "bold", cursor: "pointer", boxShadow: "0 4px 16px rgba(232,54,61,0.4)" }}>
+                <button onClick={handleInstall} style={{ flex: 1, padding: "12px", borderRadius: 12, background: `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, border: "none", color: "#fff", fontSize: 14, fontWeight: "bold", cursor: "pointer", boxShadow: `0 4px 16px ${C.mainGlow}` }}>
                   📱 インストール
                 </button>
               ) : (
-                <div style={{ flex: 1, background: "rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 14px" }}>
-                  <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, lineHeight: 1.8 }}>
-                    <span style={{ color: "#fff", fontWeight: "bold" }}>Androidの場合：</span><br/>
+                <div style={{ flex: 1, background: C.bg, borderRadius: 12, padding: "12px 14px", border: `1px solid ${C.headerBorder}` }}>
+                  <div style={{ color: C.textMid, fontSize: 12, lineHeight: 1.8 }}>
+                    <span style={{ color: C.text, fontWeight: "bold" }}>Androidの場合：</span><br/>
                     1. ブラウザの <strong>メニュー（⋮）</strong> をタップ<br/>
                     2. <strong>「ホーム画面に追加」</strong> を選択
                   </div>
                 </div>
               )}
-              <button onClick={dismissInstallBanner} style={{ padding: "12px 16px", borderRadius: 12, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.6)", fontSize: 13, cursor: "pointer" }}>
+              <button onClick={dismissInstallBanner} style={{ padding: "12px 16px", borderRadius: 12, background: C.bg, border: `1px solid ${C.headerBorder}`, color: C.textSub, fontSize: 13, cursor: "pointer" }}>
                 あとで
               </button>
             </div>
@@ -691,13 +704,12 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
 
       {/* Planner Modal */}
       {showPlanner && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 20 }}>
-          <div style={{ background: "linear-gradient(135deg, #1a0a2e, #0d1f3c)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 24, padding: 28, width: "100%", maxWidth: 420 }}>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(45,37,32,0.5)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 20 }}>
+          <div style={{ background: C.plannerBg, border: `1px solid ${C.plannerBorder}`, borderRadius: 24, padding: 28, width: "100%", maxWidth: 420, boxShadow: "0 20px 60px rgba(196,149,106,0.2)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <div style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>🗓️ Plan My Trip</div>
-              <button onClick={() => setShowPlanner(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.5)", fontSize: 22, cursor: "pointer" }}>×</button>
+              <div style={{ color: C.text, fontSize: 18, fontWeight: "bold" }}>🗓️ Plan My Trip</div>
+              <button onClick={() => setShowPlanner(false)} style={{ background: "none", border: "none", color: C.textSub, fontSize: 22, cursor: "pointer" }}>×</button>
             </div>
-
             {[
               { label: "📅 How many days?", key: "days", options: [["2", "2 days"], ["3", "3 days"], ["4", "4 days"], ["5", "5 days"], ["7", "1 week"]] },
               { label: "📍 Main area?", key: "area", options: [["Tokyo", "Tokyo"], ["Kyoto", "Kyoto"], ["Osaka", "Osaka"], ["Tokyo & Kyoto", "Tokyo + Kyoto"], ["Tokyo & Osaka", "Tokyo + Osaka"]] },
@@ -706,21 +718,21 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
               { label: "👥 Who's going?", key: "group", options: [["solo", "🧍 Solo"], ["couple", "👫 Couple"], ["family", "👨‍👩‍👧 Family"], ["friends", "👯 Friends"]] },
             ].map(({ label, key, options }) => (
               <div key={key} style={{ marginBottom: 16 }}>
-                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, marginBottom: 8 }}>{label}</div>
+                <div style={{ color: C.textMid, fontSize: 13, marginBottom: 8 }}>{label}</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {options.map(([value, display]) => (
                     <button key={value} onClick={() => setPlannerForm(prev => ({ ...prev, [key]: value }))}
                       style={{ padding: "7px 14px", borderRadius: 20, fontSize: 13, cursor: "pointer", transition: "all 0.2s",
-                        background: plannerForm[key] === value ? "linear-gradient(135deg, #e8363d, #c0392b)" : "rgba(255,255,255,0.07)",
-                        border: plannerForm[key] === value ? "none" : "1px solid rgba(255,255,255,0.15)",
-                        color: "#fff", boxShadow: plannerForm[key] === value ? "0 4px 12px rgba(232,54,61,0.3)" : "none",
+                        background: plannerForm[key] === value ? `linear-gradient(135deg, ${C.main}, ${C.mainDark})` : C.bg,
+                        border: plannerForm[key] === value ? "none" : `1px solid ${C.headerBorder}`,
+                        color: plannerForm[key] === value ? "#fff" : C.textMid,
+                        boxShadow: plannerForm[key] === value ? `0 4px 12px ${C.mainGlow}` : "none",
                       }}>{display}</button>
                   ))}
                 </div>
               </div>
             ))}
-
-            <button onClick={generateItinerary} style={{ width: "100%", padding: "14px", borderRadius: 14, background: "linear-gradient(135deg, #e8363d, #c0392b)", border: "none", color: "#fff", fontSize: 16, fontWeight: "bold", cursor: "pointer", marginTop: 8, boxShadow: "0 4px 20px rgba(232,54,61,0.4)" }}>
+            <button onClick={generateItinerary} style={{ width: "100%", padding: "14px", borderRadius: 14, background: `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, border: "none", color: "#fff", fontSize: 16, fontWeight: "bold", cursor: "pointer", marginTop: 8, boxShadow: `0 4px 20px ${C.mainGlow}` }}>
               ✨ Generate My Itinerary
             </button>
           </div>
@@ -730,10 +742,10 @@ const handleKey = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEven
       <style>{`
         @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
         * { box-sizing: border-box; }
-        textarea::placeholder { color: rgba(255,255,255,0.3); }
+        textarea::placeholder { color: ${C.textSub}; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: ${C.scrollbar}; border-radius: 4px; }
       `}</style>
     </div>
   );
