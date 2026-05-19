@@ -651,13 +651,21 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude: lat, longitude: lon } = pos.coords;
-        fetch(`https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToStGrid?lon=${lon}&lat=${lat}`)
-          .then(r => r.json())
-          .then(data => {
-            const area = data.results?.lv01Nm || `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
-            setInput(`現在地（${area}）の近くで`);
-          })
-          .catch(() => setInput(`現在地（${lat.toFixed(4)}, ${lon.toFixed(4)}）の近くで`));
+     fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ja`)
+  .then(r => r.json())
+  .then(data => {
+    const addr = data.address;
+    const area = 
+      addr.neighbourhood ||
+      addr.quarter ||
+      addr.suburb ||
+      addr.city_district ||
+      addr.city ||
+      addr.town ||
+      `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+    setInput(`現在地（${area}）の近くで`);
+  })
+  .catch(() => setInput(`現在地（${lat.toFixed(4)}, ${lon.toFixed(4)}）の近くで`));
       },
       () => alert("位置情報の取得に失敗しました")
     );
