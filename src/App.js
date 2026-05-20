@@ -179,8 +179,8 @@ const WELCOME_MESSAGES = {
 I'm **TABI**, your personal Japan concierge — specializing in the Japan that locals love.
 
 📸 **Snap & Identify!** Tap the camera to photo any food, sign, or menu.
-📍 **Real-time search** — Ask me where to eat or drink and I'll find open places right now!
-👶 **Traveling with kids?** Ask me about stroller-friendly routes and family spots!
+📍 **Nearby search** — Find open places right where you are, right now!
+📅 **Trip Planner** — Build a custom itinerary by days, area & style!
 
 What can I help you with today?`,
 
@@ -189,8 +189,8 @@ What can I help you with today?`,
 我是 **TABI**，您的私人日本礼宾员——专注于本地人喜爱的日本。
 
 📸 **拍照识别！** 拍摄食物、招牌或菜单，我来告诉您一切！
-📍 **实时搜索** — 询问我去哪里吃饭或喝酒！
-👶 **带孩子旅行？** 询问我婴儿车友好路线和亲子景点！
+📍 **周边搜索** — 立即找到您所在位置附近正在营业的地点！
+📅 **行程规划** — 根据天数、地区和风格制定专属行程！
 
 今天我可以帮您什么？`,
 
@@ -199,8 +199,8 @@ What can I help you with today?`,
 저는 **TABI**, 당신의 개인 일본 컨시어지입니다.
 
 📸 **사진으로 식별！** 음식, 간판, 메뉴를 찍으면 모든 것을 알려드립니다！
-📍 **실시간 검색** — 어디서 먹거나 마실지 물어보세요！
-👶 **아이와 함께？** 유모차 친화적 경로와 가족 명소를 알려드립니다！
+📍 **주변 검색** — 지금 계신 곳 근처의 영업 중인 장소를 바로 찾아드립니다！
+📅 **여행 플래너** — 일수, 지역, 스타일에 맞는 맞춤 일정을 만들어드립니다！
 
 오늘 무엇을 도와드릴까요？`,
 
@@ -209,8 +209,8 @@ What can I help you with today?`,
 私は **TABI**、あなた専属の日本コンシェルジュです。地元の人が愛する日本を専門にご案内します。
 
 📸 **写真で識別！** 食べ物や看板、メニューを撮影すると何でも教えます！
-📍 **リアルタイム検索** — 今営業中のお店をすぐに見つけます！
-👶 **お子様連れですか？** ベビーカーOKのルートや子連れスポットもお任せ！
+📍 **周辺検索** — 今いる場所の近くで営業中のお店をすぐに見つけます！
+📅 **旅程プランナー** — 日数・エリア・スタイルに合わせた旅程を作成します！
 
 今日は何をお手伝いしましょうか？`,
   it: `Benvenuto in Giappone! 🗾
@@ -218,8 +218,8 @@ What can I help you with today?`,
 Sono **TABI**, il tuo concierge personale per il Giappone — specializzato nel Giappone che amano i locali.
 
 📸 **Scatta & Identifica!** Fotografa qualsiasi cibo, insegna o menu.
-📍 **Ricerca in tempo reale** — Chiedimi dove mangiare o bere e troverò posti aperti adesso!
-👶 **Viaggi con bambini?** Chiedimi percorsi accessibili e posti per famiglie!
+📍 **Ricerca nelle vicinanze** — Trova posti aperti proprio dove sei adesso!
+📅 **Pianificatore di viaggio** — Crea un itinerario su misura per giorni, area e stile!
 
 Come posso aiutarti oggi?`,
 };
