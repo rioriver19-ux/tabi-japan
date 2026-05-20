@@ -286,6 +286,7 @@ export default function App() {
     try { return !localStorage.getItem("tabi_install_dismissed"); } catch { return true; }
   });
   const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showAttachMenu, setShowAttachMenu] = useState(false);
 
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isAndroid = /android/i.test(navigator.userAgent);
@@ -661,41 +662,23 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
           </div>
         )}
 
-        <div style={{ background: C.inputBg, border: `1px solid ${C.inputBorder}`, borderTop: "none", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end", boxShadow: "0 -2px 12px rgba(196,149,106,0.06)" }}>
-          <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
-          <button onClick={() => cameraInputRef.current?.click()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📷</button>
-          <button onClick={() => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude: lat, longitude: lon } = pos.coords;
-     fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ja`)
-  .then(r => r.json())
-  .then(data => {
-    const addr = data.address;
-    const area = 
-      addr.neighbourhood ||
-      addr.quarter ||
-      addr.suburb ||
-      addr.city_district ||
-      addr.city ||
-      addr.town ||
-      `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
-    setInput(`現在地（${area}）の近くで`);
-  })
-  .catch(() => setInput(`現在地（${lat.toFixed(4)}, ${lon.toFixed(4)}）の近くで`));
-      },
-      () => alert("位置情報の取得に失敗しました")
-    );
-  }
-}} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📍</button>
-          <button onClick={() => setShowPlanner(true)} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }} title="Plan itinerary">🗓️</button>
-          <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder={placeholder[lang]} rows={1}
-            style={{ flex: 1, background: C.bg, border: `1px solid ${C.inputBorder}`, borderRadius: 14, padding: "12px 16px", color: C.text, fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
-            onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
-          <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? C.headerBorder : `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, border: "none", cursor: loading || !input.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, transition: "all 0.2s", boxShadow: loading || !input.trim() ? "none" : `0 4px 16px ${C.mainGlow}`, color: loading || !input.trim() ? C.textSub : "#fff" }}>↑</button>
-        </div>
+      <div style={{ background: C.inputBg, border: `1px solid ${C.inputBorder}`, borderTop: "none", borderRadius: "0 0 20px 20px", padding: "16px 20px", display: "flex", gap: 10, alignItems: "flex-end", boxShadow: "0 -2px 12px rgba(196,149,106,0.06)" }}>
+  <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
+  <div style={{ position: "relative" }}>
+    {showAttachMenu && (
+      <div style={{ position: "absolute", bottom: 56, left: 0, background: C.header, border: `1px solid ${C.headerBorder}`, borderRadius: 16, padding: "8px", display: "flex", gap: 8, boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
+        <button onClick={() => { cameraInputRef.current?.click(); setShowAttachMenu(false); }} style={{ width: 46, height: 46, borderRadius: "50%", background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📷</button>
+        <button onClick={() => { if (navigator.geolocation) { navigator.geolocation.getCurrentPosition((pos) => { const { latitude: lat, longitude: lon } = pos.coords; fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ja`).then(r => r.json()).then(data => { const addr = data.address; const area = addr.neighbourhood || addr.quarter || addr.suburb || addr.city_district || addr.city || addr.town || `${lat.toFixed(4)}, ${lon.toFixed(4)}`; setInput(`現在地（${area}）の近くで`); }).catch(() => setInput(`現在地（${lat.toFixed(4)}, ${lon.toFixed(4)}）の近くで`)); }, () => alert("位置情報の取得に失敗しました")); } setShowAttachMenu(false); }} style={{ width: 46, height: 46, borderRadius: "50%", background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📍</button>
+        <button onClick={() => { setShowPlanner(true); setShowAttachMenu(false); }} style={{ width: 46, height: 46, borderRadius: "50%", background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📅</button>
       </div>
+    )}
+    <button onClick={() => setShowAttachMenu(v => !v)} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: showAttachMenu ? C.main : C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, color: showAttachMenu ? "white" : C.text }}>＋</button>
+  </div>
+  <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder={placeholder[lang]} rows={1}
+    style={{ flex: 1, background: C.bg, border: `1px solid ${C.inputBorder}`, borderRadius: 14, padding: "12px 16px", color: C.text, fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
+    onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
+  <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? C.headerBorder : `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, border: "none", cursor: loading || !input.trim() ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 18 }}>↑</button>
+</div>
 
       {/* Install Banner */}
       {showInstallBanner && !isInStandaloneMode && (isIOS || isAndroid) && (
