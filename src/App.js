@@ -662,7 +662,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
           </div>
         )}
 
-   <div style={{ background: C.inputBg, border: `1px solid ${C.inputBorder}`, borderTop: "none", borderRadius: "0 0 20px 20px", padding: "12px 20px 16px", display: "flex", flexDirection: "column", gap: 8, boxShadow: "0 -2px 12px rgba(196,149,106,0.06)" }}>
+  <div style={{ background: C.inputBg, border: `1px solid ${C.inputBorder}`, borderTop: "none", borderRadius: "0 0 20px 20px", padding: "12px 20px 16px", display: "flex", flexDirection: "column", gap: 8, boxShadow: "0 -2px 12px rgba(196,149,106,0.06)" }}>
   <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} onChange={handleImageSelect} style={{ display: "none" }} />
   <div style={{ display: "flex", gap: 8 }}>
     <button onClick={() => cameraInputRef.current?.click()} style={{ width: 42, height: 42, borderRadius: "50%", background: C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>📷</button>
@@ -672,7 +672,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
   <div style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
     <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder={placeholder[lang]} rows={1}
       style={{ flex: 1, background: "#FFFFFF", border: `1.5px solid ${C.main}`, borderRadius: 14, padding: "12px 16px", color: C.text, fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
-      onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
+      onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }}></textarea>
     <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? C.headerBorder : `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, border: "none", cursor: loading || !input.trim() ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 18 }}>↑</button>
   </div>
 </div>
