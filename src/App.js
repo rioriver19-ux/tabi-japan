@@ -674,6 +674,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
     )}
     <button onClick={() => setShowAttachMenu(v => !v)} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: showAttachMenu ? C.main : C.bg, border: `1px solid ${C.headerBorder}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, color: showAttachMenu ? "white" : C.text }}>＋</button>
   </div>
+</div>
   <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey} placeholder={placeholder[lang]} rows={1}
     style={{ flex: 1, background: C.bg, border: `1px solid ${C.inputBorder}`, borderRadius: 14, padding: "12px 16px", color: C.text, fontSize: 14.5, resize: "none", outline: "none", fontFamily: "inherit", lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
     onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }} />
