@@ -676,7 +676,7 @@ Include specific neighborhood names, timing tips, and local insider advice. Add 
     <button onClick={() => sendMessage()} disabled={loading || !input.trim()} style={{ width: 46, height: 46, borderRadius: "50%", flexShrink: 0, background: loading || !input.trim() ? C.headerBorder : `linear-gradient(135deg, ${C.main}, ${C.mainDark})`, border: "none", cursor: loading || !input.trim() ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 18 }}>↑</button>
   </div>
 </div>
-
+</div>
       {/* Install Banner */}
       {showInstallBanner && !isInStandaloneMode && (isIOS || isAndroid) && (
         <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.installBg, borderTop: `1px solid ${C.headerBorder}`, padding: "16px 20px", zIndex: 200, display: "flex", flexDirection: "column", gap: 12 }}>
